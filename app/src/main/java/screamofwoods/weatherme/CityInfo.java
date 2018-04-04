@@ -1,12 +1,14 @@
 package screamofwoods.weatherme;
 
+import android.widget.TextView;
+
 import java.util.Date;
 
 public class CityInfo {
-    private SearchForCity searchForCity;
+    //private SearchForCity searchForCity;
     private Forecast forecast;
-    private UVRays uvRays;
-    private Pollution pollution;
+    //private UVRays uvRays;
+    //private Pollution pollution;
     private Date lastUpdated;
     private String[] weatherConditionHourly;
     private float[] tempetureHourly;
@@ -30,7 +32,7 @@ public class CityInfo {
     public CityInfo(){
 
     }
-    public CityInfo(String name, float lat, float lon, boolean isMetric){
+    public CityInfo(String name, float lat, float lon, boolean isMetric, TextView tv){
         this.name = name;
         this.lat = lat;
         this.lon = lon;
@@ -38,6 +40,8 @@ public class CityInfo {
         tempetureHourly = new float[24];
         chanceOfRainHourly = new int[24];
         this.isMetric = isMetric;
+        forecast = new Forecast(this, tv);
+        forecast.getMomentForecast();
     }
 
     public void setLastUpdated(Date lastUpdated) {
@@ -145,8 +149,8 @@ public class CityInfo {
         return pollutionIndex;
     }
 
-    public float getTemperature() {
-        return temperature;
+    public float getCurrentTemperature() {
+        return currentTemperature;
     }
 
     public float getWindSpeed() {

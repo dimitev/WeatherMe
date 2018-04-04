@@ -1,9 +1,13 @@
 package screamofwoods.weatherme;
 
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,12 +23,14 @@ public class Forecast {
     private CityInfo city;
     private AsyncHttpClient asyncHttpClient;
     private RequestParams requestParams;
+    private TextView tv;
 
-    public Forecast(CityInfo city) {
+    public Forecast(CityInfo city, TextView tv) {
         this.city = city;
         asyncHttpClient = new AsyncHttpClient();
         requestParams = new RequestParams();
         requestParams.add("key", API_KEY);
+        this.tv = tv;
     }
 
     public void getMomentForecast()
@@ -40,14 +46,16 @@ public class Forecast {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response){
                     super.onSuccess(statusCode, headers, response);
                     try {
-                        city.setLastUpdated((Date) response.getJSONObject("current").get("last_updated"));
-                        city.setAtmPressure((float) response.getJSONObject("current").getDouble("pressure_mb"));
-                        city.setChanceOfRain(response.getJSONObject("forecast").getJSONArray("forecastday").getJSONArray(0).getJSONArray());
+                        //city.setLastUpdated((Date) response.getJSONObject("current").get("last_updated"));
+                        //city.setAtmPressure((float) response.getJSONObject("current").getDouble("pressure_mb"));
+                        //city.setChanceOfRain(response.getJSONObject("forecast").getJSONArray("forecastday").getJSONArray(0).optJSONObject(0).getInt("will_it_rain"));
+
+                        tv.setText(response.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONArray("hour").getJSONObject(0).getString("time"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-            })
+            });
         }
     }
 

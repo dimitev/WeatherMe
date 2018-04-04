@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         txtData = findViewById(R.id.txtData);
+        CityInfo c = new CityInfo("Sofia", (float)42.68, (float)23.32, true, txtData);
         //weatherApiCall = new WeatherApiCall(txtData);
         //weatherApiCall.GetDailyForecast("Elena");
     }
