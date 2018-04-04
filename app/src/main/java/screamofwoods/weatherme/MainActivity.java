@@ -9,7 +9,7 @@ package screamofwoods.weatherme;
 public class MainActivity extends AppCompatActivity {
 
     TextView txtData;
-    WeatherApiCall weatherApiCall;
+    //WeatherApiCall weatherApiCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         txtData = findViewById(R.id.txtData);
-        weatherApiCall = new WeatherApiCall(txtData);
-        weatherApiCall.GetDailyForecast(727696);
+        //weatherApiCall = new WeatherApiCall(txtData);
+        //weatherApiCall.GetDailyForecast("Elena");
     }
 }
