@@ -2,21 +2,21 @@ package screamofwoods.weatherme;
 
 import android.widget.TextView;
 
-import java.util.Date;
+import org.joda.time.DateTime;
 
 public class CityInfo {
     //private SearchForCity searchForCity;
     private Forecast forecast;
     //private UVRays uvRays;
     //private Pollution pollution;
-    private Date lastUpdated;
+    private String lastUpdated;
     private String[] weatherConditionHourly;
-    private float[] tempetureHourly;
+    private float[] temperatureHourly;
     private int[] chanceOfRainHourly;
     private String name;
     private String weatherCondition;
     private String windDirection; //Compass
-    private double pollutionIndex;
+    private int cloudCoverage;
     private float currentTemperature;
     private float minimumTemperature;
     private float maximumTemperature;
@@ -37,14 +37,14 @@ public class CityInfo {
         this.lat = lat;
         this.lon = lon;
         weatherConditionHourly = new String[24];
-        tempetureHourly = new float[24];
+        temperatureHourly = new float[24];
         chanceOfRainHourly = new int[24];
         this.isMetric = isMetric;
         forecast = new Forecast(this, tv);
         forecast.getMomentForecast();
     }
 
-    public void setLastUpdated(Date lastUpdated) {
+    public void setLastUpdated(String lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
@@ -61,11 +61,11 @@ public class CityInfo {
         this.windDirection = windDirection;
     }
 
-    public void setPollutionIndex(double pollutionIndex) {
-        this.pollutionIndex = pollutionIndex;
+    public void setCloudCoverage(int cloudCoverage) {
+        this.cloudCoverage = cloudCoverage;
     }
 
-    public void setCurrentTemperatureTemperature(float currentTemperature) {
+    public void setCurrentTemperature(float currentTemperature) {
         this.currentTemperature = currentTemperature;
     }
 
@@ -117,7 +117,7 @@ public class CityInfo {
         this.isMetric = isMetric;
     }
 
-    public Date getLastUpdated() {
+    public String getLastUpdated() {
         return lastUpdated;
     }
 
@@ -125,8 +125,8 @@ public class CityInfo {
         return weatherConditionHourly;
     }
 
-    public float[] getTempetureHourly() {
-        return tempetureHourly;
+    public float[] getTemperatureHourly() {
+        return temperatureHourly;
     }
 
     public int[] getChanceOfRainHourly() {
@@ -137,6 +137,8 @@ public class CityInfo {
         return name;
     }
 
+    public  Boolean getIsMetric(){return isMetric;}
+
     public String getWeatherCondition() {
         return weatherCondition;
     }
@@ -145,8 +147,8 @@ public class CityInfo {
         return windDirection;
     }
 
-    public double getPollutionIndex() {
-        return pollutionIndex;
+    public int getCloudCoverage() {
+        return cloudCoverage;
     }
 
     public float getCurrentTemperature() {
