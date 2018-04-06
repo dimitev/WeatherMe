@@ -44,14 +44,21 @@ public class Forecast {
             requestParams.add("q", Float.toString(city.getLat()) + "," + Float.toString(city.getLon()));
         }
         DateTime date = new DateTime();
-        String currentHour = Integer.toString(date.getHourOfDay());
-        requestParams.add("hour", currentHour);
+        int currentHour = date.getHourOfDay();
+        if(date.getMinuteOfHour() >= 30){
+            if(currentHour == 23) {
+                currentHour = 0;
+            }else {
+                currentHour++;
+            }
+        }
+        requestParams.add("hour", Integer.toString(currentHour));
         asyncHttpClient.get(BASE_URL, requestParams, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response){
                 super.onSuccess(statusCode, headers, response);
                 try {
-                    if((city.getName() != null) || !(city.getName().isEmpty())){
+                    if(city.getName().isEmpty()){
                         city.setName(response.getJSONObject("location").getString("name"));
                     }
                     city.setLastUpdated(response.getJSONObject("current").getString("last_updated"));
@@ -74,7 +81,7 @@ public class Forecast {
                         city.setMinimumTemperature((float) response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONObject("day").getDouble("mintemp_f"));
                     }
 
-                    tv.setText(city.getName()); //Used for debugging
+                    //tv.setText(city.getName()); //Used for debugging
                     //tv.setText(response.getJSONObject("forecast").getJSONArray("forecastday").getJSONArray(0).optJSONArray(0).getJSONObject(0).getString("chance_of_rain"));
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -83,4 +90,46 @@ public class Forecast {
         });
     }
 
+    public void getHourlyForecast(){
+        if(!(city.getName().isEmpty())) {
+            requestParams.add("q", city.getName());
+        } else {
+            requestParams.add("q", Float.toString(city.getLat()) + "," + Float.toString(city.getLon()));
+        }
+        asyncHttpClient.get(BASE_URL, requestParams, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                JSONArray hourlyForecastJSON = null;
+                String[] weatherConditionHourly = new String[24];
+                float[] temperatureHourly = new float[24];
+                int[] chanceOfRainHourly = new int[24];
+                Log.e("Success", "ARI WA");
+                try {
+                    hourlyForecastJSON = response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONArray("hour");
+                    if(city.getIsMetric())
+                    {
+                        for(int i = 0; i < 24; i++){
+                            temperatureHourly[i] = (float) hourlyForecastJSON.optJSONObject(i).getDouble("temp_c");
+                            chanceOfRainHourly[i] = hourlyForecastJSON.optJSONObject(i).getInt("chance_of_rain");
+                            weatherConditionHourly[i] = hourlyForecastJSON.optJSONObject(i).getJSONObject("condition").getString("text");
+                            Log.e("Hour:", i + weatherConditionHourly[i]);
+                        }
+                    } else {
+                        for(int i = 0; i < 24; i++){
+                            temperatureHourly[i] = (float) hourlyForecastJSON.optJSONObject(i).getDouble("temp_f");
+                            chanceOfRainHourly[i] = hourlyForecastJSON.optJSONObject(i).getInt("chance_of_rain");
+                            weatherConditionHourly[i] = hourlyForecastJSON.optJSONObject(i).getJSONObject("condition").getString("text");
+                        }
+                    }
+                    city.setTemperatureHourly(temperatureHourly);
+                    city.setChanceOfRainHourly(chanceOfRainHourly);
+                    city.setWeatherConditionHourly(weatherConditionHourly);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //tv.setText(temperatureHourly.toString());
+            }
+        });
+    }
 }

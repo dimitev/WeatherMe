@@ -2,8 +2,6 @@ package screamofwoods.weatherme;
 
 import android.widget.TextView;
 
-import org.joda.time.DateTime;
-
 public class CityInfo {
     //private SearchForCity searchForCity;
     private Forecast forecast;
@@ -13,7 +11,7 @@ public class CityInfo {
     private int[] chanceOfRainHourly;
     private String name = "";
     private String weatherCondition;
-    private String windDirection; //Compass
+    private String windDirection; //Compass N, E, S, W, etc...
     private int cloudCoverage;
     private float currentTemperature;
     private float minimumTemperature;
@@ -39,7 +37,7 @@ public class CityInfo {
         chanceOfRainHourly = new int[24];
         this.isMetric = isMetric;
         forecast = new Forecast(this, tv);
-        forecast.getMomentForecast();
+        forecast.getHourlyForecast();
     }
 
     public CityInfo(float lat, float lon, boolean isMetric, TextView tv){
@@ -50,7 +48,7 @@ public class CityInfo {
         chanceOfRainHourly = new int[24];
         this.isMetric = isMetric;
         forecast = new Forecast(this, tv);
-        forecast.getMomentForecast();
+        forecast.getHourlyForecast();
     }
 
     public void setLastUpdated(String lastUpdated) {
@@ -124,6 +122,18 @@ public class CityInfo {
 
     public void setIsMetric(boolean isMetric){
         this.isMetric = isMetric;
+    }
+
+    public void setWeatherConditionHourly(String[] weatherConditionHourly) {
+        this.weatherConditionHourly = weatherConditionHourly;
+    }
+
+    public void setTemperatureHourly(float[] temperatureHourly) {
+        this.temperatureHourly = temperatureHourly;
+    }
+
+    public void setChanceOfRainHourly(int[] chanceOfRainHourly) {
+        this.chanceOfRainHourly = chanceOfRainHourly;
     }
 
     public String getLastUpdated() {

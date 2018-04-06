@@ -3,10 +3,6 @@ package screamofwoods.weatherme;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.widget.TextView;
-        import android.widget.Toast;
-
-        import org.joda.time.DateTime;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,10 +15,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         txtData = findViewById(R.id.txtData);
-        CityInfo c = new CityInfo((float)25.25, (float)55.28, true, txtData);
-        DateTime dt = new DateTime();
-        String hour = Integer.toString(dt.getHourOfDay());
-        Toast.makeText(this, "Current hour: " + hour, Toast.LENGTH_LONG).show();
+        CityInfo c = new CityInfo("Sofia", (float)25.25, (float)55.28, true, txtData);
         //weatherApiCall = new WeatherApiCall(txtData);
         //weatherApiCall.GetDailyForecast("Elena");
     }
