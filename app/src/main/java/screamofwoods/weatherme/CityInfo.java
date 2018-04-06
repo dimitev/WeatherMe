@@ -7,13 +7,11 @@ import org.joda.time.DateTime;
 public class CityInfo {
     //private SearchForCity searchForCity;
     private Forecast forecast;
-    //private UVRays uvRays;
-    //private Pollution pollution;
     private String lastUpdated;
     private String[] weatherConditionHourly;
     private float[] temperatureHourly;
     private int[] chanceOfRainHourly;
-    private String name;
+    private String name = "";
     private String weatherCondition;
     private String windDirection; //Compass
     private int cloudCoverage;
@@ -34,6 +32,17 @@ public class CityInfo {
     }
     public CityInfo(String name, float lat, float lon, boolean isMetric, TextView tv){
         this.name = name;
+        this.lat = lat;
+        this.lon = lon;
+        weatherConditionHourly = new String[24];
+        temperatureHourly = new float[24];
+        chanceOfRainHourly = new int[24];
+        this.isMetric = isMetric;
+        forecast = new Forecast(this, tv);
+        forecast.getMomentForecast();
+    }
+
+    public CityInfo(float lat, float lon, boolean isMetric, TextView tv){
         this.lat = lat;
         this.lon = lon;
         weatherConditionHourly = new String[24];

@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         txtData = findViewById(R.id.txtData);
-        CityInfo c = new CityInfo("Sofia", (float)42.68, (float)23.32, true, txtData);
+        CityInfo c = new CityInfo((float)25.25, (float)55.28, true, txtData);
         DateTime dt = new DateTime();
         String hour = Integer.toString(dt.getHourOfDay());
         Toast.makeText(this, "Current hour: " + hour, Toast.LENGTH_LONG).show();
