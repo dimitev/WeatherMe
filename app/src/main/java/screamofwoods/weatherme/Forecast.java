@@ -20,7 +20,7 @@ import java.util.Date;
 import cz.msebera.android.httpclient.Header;
 
 public class Forecast {
-    private static final String BASE_URL = "http://api.apixu.com/v1/forecast.json";
+    private static final String BASE_URL = "https://api.apixu.com/v1/forecast.json";
     private static final String API_KEY = "9593a63a2df64b31bfe183434180204";
     private CityInfo city;
     private AsyncHttpClient asyncHttpClient;
@@ -87,6 +87,13 @@ public class Forecast {
                     e.printStackTrace();
                 }
             }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable e, JSONObject errorResponse) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                //Log.e("Http error",e.getMessage());
+                //Notify that there is an error e.g. no internet connection
+            }
+
         });
     }
 
@@ -113,7 +120,7 @@ public class Forecast {
                             temperatureHourly[i] = (float) hourlyForecastJSON.optJSONObject(i).getDouble("temp_c");
                             chanceOfRainHourly[i] = hourlyForecastJSON.optJSONObject(i).getInt("chance_of_rain");
                             weatherConditionHourly[i] = hourlyForecastJSON.optJSONObject(i).getJSONObject("condition").getString("text");
-                            Log.e("Hour:", i + weatherConditionHourly[i]);
+                            //Log.e("Hour:", i + weatherConditionHourly[i]);
                         }
                     } else {
                         for(int i = 0; i < 24; i++){
@@ -129,6 +136,12 @@ public class Forecast {
                     e.printStackTrace();
                 }
                 //tv.setText(temperatureHourly.toString());
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable e, JSONObject errorResponse) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                //Log.e("Http error",e.getMessage());
+                //Notify that there is an error e.g. no internet connection
             }
         });
     }

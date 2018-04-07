@@ -28,27 +28,37 @@ public class CityInfo {
     public CityInfo(){
 
     }
+
+//    public CityInfo(String name)
+//    {
+//        searchForCity.findCityByName(this, name);
+//    }
+
+//    public CityInfo(float lat, float lon){
+//        searForCity.findCityByCoordinates(this, lat, lon);
+//    }
+
     public CityInfo(String name, float lat, float lon, boolean isMetric, TextView tv){
         this.name = name;
         this.lat = lat;
         this.lon = lon;
-        weatherConditionHourly = new String[24];
-        temperatureHourly = new float[24];
-        chanceOfRainHourly = new int[24];
+//        weatherConditionHourly = new String[24];
+//        temperatureHourly = new float[24];
+//        chanceOfRainHourly = new int[24];
         this.isMetric = isMetric;
         forecast = new Forecast(this, tv);
-        forecast.getHourlyForecast();
+        forecast.getMomentForecast();
     }
 
     public CityInfo(float lat, float lon, boolean isMetric, TextView tv){
         this.lat = lat;
         this.lon = lon;
-        weatherConditionHourly = new String[24];
-        temperatureHourly = new float[24];
-        chanceOfRainHourly = new int[24];
+//        weatherConditionHourly = new String[24];
+//        temperatureHourly = new float[24];
+//        chanceOfRainHourly = new int[24];
         this.isMetric = isMetric;
         forecast = new Forecast(this, tv);
-        forecast.getHourlyForecast();
+        forecast.getMomentForecast();
     }
 
     public void setLastUpdated(String lastUpdated) {
