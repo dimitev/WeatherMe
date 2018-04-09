@@ -2,8 +2,6 @@ package screamofwoods.weatherme;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -14,10 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import cz.msebera.android.httpclient.Header;
 
 public class Forecast {
@@ -26,14 +20,12 @@ public class Forecast {
     private CityInfo city;
     private AsyncHttpClient asyncHttpClient;
     private RequestParams requestParams;
-    private TextView tv;
 
-    public Forecast(CityInfo city, TextView tv) {
+    public Forecast(CityInfo city) {
         this.city = city;
         asyncHttpClient = new AsyncHttpClient();
         requestParams = new RequestParams();
         requestParams.add("key", API_KEY);
-        this.tv = tv;
     }
 
     //Update the current weather for a city
@@ -62,6 +54,8 @@ public class Forecast {
                     if(city.getName().isEmpty()){
                         city.setName(response.getJSONObject("location").getString("name"));
                     }
+                    city.setRegion(response.getJSONObject("location").getString("region"));
+                    city.setCountry(response.getJSONObject("location").getString("country"));
                     city.setLastUpdated(response.getJSONObject("current").getString("last_updated"));
                     city.setAtmPressure((float) response.getJSONObject("current").getDouble("pressure_mb"));
                     city.setChanceOfRain(response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONArray("hour").optJSONObject(0).getInt("chance_of_rain"));
@@ -81,9 +75,6 @@ public class Forecast {
                         city.setMaximumTemperature((float) response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONObject("day").getDouble("maxtemp_f"));
                         city.setMinimumTemperature((float) response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONObject("day").getDouble("mintemp_f"));
                     }
-
-                    //tv.setText(city.getName()); //Used for debugging
-                    //tv.setText(response.getJSONObject("forecast").getJSONArray("forecastday").getJSONArray(0).optJSONArray(0).getJSONObject(0).getString("chance_of_rain"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -130,7 +121,6 @@ public class Forecast {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                //tv.setText(temperatureHourly.toString());
             }
         });
     }
