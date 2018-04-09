@@ -13,13 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import screamofwoods.weatherme.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    TextView txtData;
     public static ActivityMainBinding binding;//the binding between the classes and UI
     public CityInfo c;//test city
     private ActionBarDrawerToggle mDrawerToggle;//holds info for the toolbar
@@ -28,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true, txtData);
+        c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
         c.forecast.getMomentForecast();//gets some forecast
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);//creates the binding
         binding.setState(c);//sets the city to be shown in the activity_main

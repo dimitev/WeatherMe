@@ -2,7 +2,6 @@ package screamofwoods.weatherme;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.widget.TextView;
 
 public class CityInfo extends BaseObservable {
     //private SearchForCity searchForCity;
@@ -12,6 +11,8 @@ public class CityInfo extends BaseObservable {
     private float[] temperatureHourly;
     private int[] chanceOfRainHourly;
     private String name = "";
+    private String region = "";
+    private String country = "";
     private String weatherCondition;
     private String windDirection; //Compass N, E, S, W, etc...
     private int cloudCoverage;
@@ -31,7 +32,7 @@ public class CityInfo extends BaseObservable {
 
     }
 
-    public CityInfo(String name, float lat, float lon, boolean isMetric, TextView tv) {
+    public CityInfo(String name, float lat, float lon, boolean isMetric) {
         this.name = name;
         this.lat = lat;
         this.lon = lon;
@@ -39,20 +40,20 @@ public class CityInfo extends BaseObservable {
         temperatureHourly = new float[24];
         chanceOfRainHourly = new int[24];
         this.isMetric = isMetric;
-        forecast = new Forecast(this, tv);
-        forecast.getHourlyForecast();
+        forecast = new Forecast(this);
+        //forecast.getHourlyForecast();
         notifyPropertyChanged(BR._all);
     }
 
-    public CityInfo(float lat, float lon, boolean isMetric, TextView tv) {
+    public CityInfo(float lat, float lon, boolean isMetric) {
         this.lat = lat;
         this.lon = lon;
         weatherConditionHourly = new String[24];
         temperatureHourly = new float[24];
         chanceOfRainHourly = new int[24];
         this.isMetric = isMetric;
-        forecast = new Forecast(this, tv);
-        forecast.getHourlyForecast();
+        forecast = new Forecast(this);
+        //forecast.getHourlyForecast();
         notifyPropertyChanged(BR._all);
     }
 
@@ -247,4 +248,19 @@ public class CityInfo extends BaseObservable {
         return chanceOfRain;
     }
 
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
 }
