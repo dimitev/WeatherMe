@@ -20,25 +20,21 @@ import screamofwoods.weatherme.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     TextView txtData;
-    //WeatherApiCall weatherApiCall;
-    public static ActivityMainBinding binding;
-    public CityInfo c;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerLayout;
+    public static ActivityMainBinding binding;//the binding between the classes and UI
+    public CityInfo c;//test city
+    private ActionBarDrawerToggle mDrawerToggle;//holds info for the toolbar
+    private DrawerLayout mDrawerLayout;//holds info for the toolbar
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true, txtData);
-        c.forecast.getMomentForecast();
-        //setContentView(R.layout.activity_main);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        //city=new CityInfo();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        c.forecast.getMomentForecast();//gets some forecast
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);//creates the binding
+        binding.setState(c);//sets the city to be shown in the activity_main
+        binding.currentContent.setState(c);//sets the city to be shown in the content
 
-        //mDrawerToggle.syncState();
-        binding.setState(c);
-        binding.currentContent.setState(c);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);//part from the toolbar arrow button
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
@@ -57,23 +53,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        //txtData = findViewById(R.id.txtData);
-        //CityInfo c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true, txtData);
-        //weatherApiCall = new WeatherApiCall(txtData);
-        //weatherApiCall.GetDailyForecast("Elena");
-        //Toolbar tb=findViewById(R.id.my_toolbar);
         setSupportActionBar((Toolbar) findViewById(R.id.my_toolbar));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//shows the toolbar arrow and hamburger menu
+        getSupportActionBar().setHomeButtonEnabled(true);//shows the toolbar arrow and hamburger menu
+        getSupportActionBar().setDisplayShowTitleEnabled(false);//removes the title
         setupDrawer();
-        binding.swiperefresh.setOnRefreshListener(
+        binding.swiperefresh.setOnRefreshListener(//swipe down to refresh listener
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        binding.swiperefresh.setRefreshing(true);
+                        binding.swiperefresh.setRefreshing(true);//changes the state of the icon
                         c.forecast.getMomentForecast();
-                        MainActivity.binding.swiperefresh.setRefreshing(false);
+                        binding.swiperefresh.setRefreshing(false);
                     }
                 }
         );
@@ -82,11 +73,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
+        mDrawerToggle.syncState();//syncs the arrow/hamburger with the drawer state
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(Configuration newConfig) {//if the drawer has been intervined with of the phone rotated the buttons will be updated
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
@@ -118,28 +109,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        /*//noinspection SimplifiableIfStatement
-        //if (id == R.id.action_settings) {//handling th e setting press
-        //    return true;
-        //}
-        if (R.id.swiperefresh == id)//hadling the refresh gesture
-        {
-
+        if (mDrawerToggle.onOptionsItemSelected(item)) {//handles the hamburger /arrow click
             return true;
-        }*/
-
-        //
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item) {//handles the click in drawer
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -158,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);//closes the drawer upon click
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
