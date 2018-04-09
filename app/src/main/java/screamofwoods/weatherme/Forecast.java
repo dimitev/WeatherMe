@@ -1,5 +1,6 @@
 package screamofwoods.weatherme;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -88,6 +89,7 @@ public class Forecast {
                 }
             }
         });
+        //SwipeRefreshLayout sr=findViewById(R.id.swiperefresh);
     }
 
     public void getHourlyForecast(){

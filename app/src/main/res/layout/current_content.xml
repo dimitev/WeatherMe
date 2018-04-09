@@ -21,53 +21,55 @@
             android:layout_width="50dp"
             android:layout_height="20dp"
             android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:text="name:" />
+            android:text="name:"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/txtCityName"
             android:layout_width="120dp"
             android:layout_height="50dp"
             android:layout_below="@+id/txtCityNameView"
-            android:textAlignment="center"
             android:layout_centerHorizontal="true"
             android:text="@{state.name}"
+            android:textAlignment="center"
             android:textSize="40dp" />
+
         <TextView
             android:id="@+id/txtCityTempView"
             android:layout_width="90dp"
             android:layout_height="20dp"
             android:layout_below="@+id/txtCityName"
             android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:text="current temp:" />
+            android:text="current temp:"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/txtCityTemp"
             android:layout_width="80dp"
             android:layout_height="50dp"
             android:layout_below="@+id/txtCityTempView"
-            android:textAlignment="center"
             android:layout_centerHorizontal="true"
             android:text="@{String.valueOf(state.currentTemperature)}"
+            android:textAlignment="center"
             android:textSize="40dp" />
+
         <TextView
             android:id="@+id/txtCityWindView"
             android:layout_width="200dp"
             android:layout_height="20dp"
             android:layout_below="@+id/txtCityTemp"
             android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:text="current windspeed:" />
+            android:text="current windspeed:"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/txtCityWind"
             android:layout_width="80dp"
             android:layout_height="50dp"
             android:layout_below="@+id/txtCityWindView"
-            android:textAlignment="center"
             android:layout_centerHorizontal="true"
             android:text="@{String.valueOf(state.windSpeed)}"
+            android:textAlignment="center"
             android:textSize="40dp" />
     </RelativeLayout>
 </layout>
