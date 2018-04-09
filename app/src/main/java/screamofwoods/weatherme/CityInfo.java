@@ -1,10 +1,12 @@
 package screamofwoods.weatherme;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.widget.TextView;
 
-public class CityInfo {
+public class CityInfo extends BaseObservable {
     //private SearchForCity searchForCity;
-    private Forecast forecast;
+    public Forecast forecast;
     private String lastUpdated;
     private String[] weatherConditionHourly;
     private float[] temperatureHourly;
@@ -25,10 +27,11 @@ public class CityInfo {
     private int chanceOfRain;
     private boolean isMetric;
 
-    public CityInfo(){
+    public CityInfo() {
 
     }
-    public CityInfo(String name, float lat, float lon, boolean isMetric, TextView tv){
+
+    public CityInfo(String name, float lat, float lon, boolean isMetric, TextView tv) {
         this.name = name;
         this.lat = lat;
         this.lon = lon;
@@ -38,9 +41,10 @@ public class CityInfo {
         this.isMetric = isMetric;
         forecast = new Forecast(this, tv);
         forecast.getHourlyForecast();
+        notifyPropertyChanged(BR._all);
     }
 
-    public CityInfo(float lat, float lon, boolean isMetric, TextView tv){
+    public CityInfo(float lat, float lon, boolean isMetric, TextView tv) {
         this.lat = lat;
         this.lon = lon;
         weatherConditionHourly = new String[24];
@@ -49,155 +53,196 @@ public class CityInfo {
         this.isMetric = isMetric;
         forecast = new Forecast(this, tv);
         forecast.getHourlyForecast();
+        notifyPropertyChanged(BR._all);
     }
 
     public void setLastUpdated(String lastUpdated) {
         this.lastUpdated = lastUpdated;
+        notifyPropertyChanged(BR._all);
     }
 
 
     public void setName(String name) {
         this.name = name;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setWeatherCondition(String weatherCondition) {
         this.weatherCondition = weatherCondition;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setWindDirection(String windDirection) {
         this.windDirection = windDirection;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setCloudCoverage(int cloudCoverage) {
         this.cloudCoverage = cloudCoverage;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setCurrentTemperature(float currentTemperature) {
         this.currentTemperature = currentTemperature;
+        notifyPropertyChanged(BR._all);
     }
 
+    @Bindable
     public float getMinimumTemperature() {
         return minimumTemperature;
     }
 
     public void setMinimumTemperature(float minimumTemperature) {
         this.minimumTemperature = minimumTemperature;
+        notifyPropertyChanged(BR._all);
     }
 
+    @Bindable
     public float getMaximumTemperature() {
         return maximumTemperature;
     }
 
     public void setMaximumTemperature(float maximumTemperature) {
         this.maximumTemperature = maximumTemperature;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setWindSpeed(float windSpeed) {
         this.windSpeed = windSpeed;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setAtmPressure(float atmPressure) {
         this.atmPressure = atmPressure;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setLat(float lat) {
         this.lat = lat;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setLon(float lon) {
         this.lon = lon;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setUvIndex(float uvIndex) {
         this.uvIndex = uvIndex;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setHumidity(int humidity) {
         this.humidity = humidity;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setChanceOfRain(int chanceOfRain) {
         this.chanceOfRain = chanceOfRain;
+        notifyPropertyChanged(BR._all);
     }
 
-    public void setIsMetric(boolean isMetric){
+    public void setIsMetric(boolean isMetric) {
         this.isMetric = isMetric;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setWeatherConditionHourly(String[] weatherConditionHourly) {
         this.weatherConditionHourly = weatherConditionHourly;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setTemperatureHourly(float[] temperatureHourly) {
         this.temperatureHourly = temperatureHourly;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setChanceOfRainHourly(int[] chanceOfRainHourly) {
         this.chanceOfRainHourly = chanceOfRainHourly;
+        notifyPropertyChanged(BR._all);
     }
 
+    @Bindable
     public String getLastUpdated() {
         return lastUpdated;
     }
 
+    @Bindable
     public String[] getWeatherConditionHourly() {
         return weatherConditionHourly;
     }
 
+    @Bindable
     public float[] getTemperatureHourly() {
         return temperatureHourly;
     }
 
+    @Bindable
     public int[] getChanceOfRainHourly() {
         return chanceOfRainHourly;
     }
 
+    @Bindable
     public String getName() {
         return name;
     }
 
-    public  Boolean getIsMetric(){return isMetric;}
+    @Bindable
+    public Boolean getIsMetric() {
+        return isMetric;
+    }
 
+    @Bindable
     public String getWeatherCondition() {
         return weatherCondition;
     }
 
+    @Bindable
     public String getWindDirection() {
         return windDirection;
     }
 
+    @Bindable
     public int getCloudCoverage() {
         return cloudCoverage;
     }
 
+    @Bindable
     public float getCurrentTemperature() {
         return currentTemperature;
     }
 
+    @Bindable
     public float getWindSpeed() {
         return windSpeed;
     }
 
+    @Bindable
     public float getAtmPressure() {
         return atmPressure;
     }
 
+    @Bindable
     public float getLat() {
         return lat;
     }
 
+    @Bindable
     public float getLon() {
         return lon;
     }
 
+    @Bindable
     public float getUvIndex() {
         return uvIndex;
     }
 
+    @Bindable
     public int getHumidity() {
         return humidity;
     }
 
+    @Bindable
     public int getChanceOfRain() {
         return chanceOfRain;
     }

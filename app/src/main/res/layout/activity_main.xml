@@ -16,23 +16,9 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:openDrawer="start">
-
-
-
-            <TextView
-                android:id="@+id/txtCityNameView"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="n:" />
-
-            <TextView
-                android:id="@+id/txtCityName"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-
-                android:text="@{state.name}" />
-
-
+        <include
+            android:id="@+id/current_content"
+            layout="@layout/current_content" />
 
         <android.support.design.widget.NavigationView
             android:id="@+id/nav_view"

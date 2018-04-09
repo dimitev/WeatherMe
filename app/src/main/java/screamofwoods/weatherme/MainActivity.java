@@ -21,10 +21,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true, txtData);
+        c.forecast.getMomentForecast();
         setContentView(R.layout.activity_main);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         //city=new CityInfo();
         binding.setState(c);
+        binding.currentContent.setState(c);
         //txtData = findViewById(R.id.txtData);
         //CityInfo c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true, txtData);
         //weatherApiCall = new WeatherApiCall(txtData);
