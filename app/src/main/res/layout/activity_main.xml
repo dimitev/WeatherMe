@@ -21,15 +21,12 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#22000000"
+            android:background="#00000000"
             android:elevation="4dp"
             android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-            app:titleTextColor="@android:color/white"
-
-
-            />
+            app:titleTextColor="@android:color/white" />
 
         <android.support.v4.widget.DrawerLayout
             android:id="@+id/drawer_layout"
@@ -38,30 +35,47 @@
             android:fitsSystemWindows="true"
             tools:openDrawer="start">
 
-            <include
-                android:id="@+id/current_content"
-                layout="@layout/current_content" />
-
-            <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/swiperefresh"
+            <android.support.v4.widget.DrawerLayout
+                android:id="@+id/drawer_layoutcities"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ListView
-                    android:id="@android:id/list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </android.support.v4.widget.SwipeRefreshLayout>
-
-            <android.support.design.widget.NavigationView
-                android:id="@+id/nav_view"
-                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="start"
                 android:fitsSystemWindows="true"
+                tools:openDrawer="end">
 
-                app:menu="@menu/activity_main_drawer" />
+                <include
+                    android:id="@+id/current_content"
+                    layout="@layout/current_content" />
+
+                <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/swiperefresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ListView
+                        android:id="@android:id/list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </android.support.v4.widget.SwipeRefreshLayout>
+
+                <android.support.design.widget.NavigationView
+                    android:id="@+id/nav_viewcities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:fitsSystemWindows="true"
+
+                    app:menu="@menu/activity_main_drawer" />
+            </android.support.v4.widget.DrawerLayout>
+                <android.support.design.widget.NavigationView
+                    android:id="@+id/nav_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:fitsSystemWindows="true"
+
+                    app:menu="@menu/activity_main_drawer" />
+
 
         </android.support.v4.widget.DrawerLayout>
     </LinearLayout>
