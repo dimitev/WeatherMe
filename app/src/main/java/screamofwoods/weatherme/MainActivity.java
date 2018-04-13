@@ -28,10 +28,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
         c.forecast.getMomentForecast();//gets some forecast
+        prepareBinding();
+        prepareToolbar();
+        prepareDrawer();
+    }
+
+    private void prepareBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);//creates the binding
         binding.setState(c);//sets the city to be shown in the activity_main
         binding.currentContent.setState(c);//sets the city to be shown in the content
+        binding.swiperefresh.setOnRefreshListener(//swipe down to refresh listener
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        binding.swiperefresh.setRefreshing(true);//changes the state of the icon
+                        c.forecast.getMomentForecast();
+                        binding.swiperefresh.setRefreshing(false);
+                    }
+                }
+        );
+    }
 
+    private void prepareToolbar() {
+
+        setSupportActionBar((Toolbar) findViewById(R.id.my_toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//shows the toolbar arrow and hamburger menu
+        getSupportActionBar().setHomeButtonEnabled(true);//shows the toolbar arrow and hamburger menu
+        getSupportActionBar().setDisplayShowTitleEnabled(false);//removes the title
+
+    }
+
+    private void prepareDrawer() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);//part from the toolbar arrow button
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -50,22 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
-
-        setSupportActionBar((Toolbar) findViewById(R.id.my_toolbar));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//shows the toolbar arrow and hamburger menu
-        getSupportActionBar().setHomeButtonEnabled(true);//shows the toolbar arrow and hamburger menu
-        getSupportActionBar().setDisplayShowTitleEnabled(false);//removes the title
         setupDrawer();
-        binding.swiperefresh.setOnRefreshListener(//swipe down to refresh listener
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        binding.swiperefresh.setRefreshing(true);//changes the state of the icon
-                        c.forecast.getMomentForecast();
-                        binding.swiperefresh.setRefreshing(false);
-                    }
-                }
-        );
     }
 
     @Override
