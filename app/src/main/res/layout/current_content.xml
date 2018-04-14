@@ -28,12 +28,22 @@
             android:textColor="@android:color/white"/>
 
         <TextView
+            android:id="@+id/txtCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@{state.country}"
+            android:layout_below="@+id/txtCityName"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textColor="@android:color/white"/>
+        <TextView
             android:id="@+id/txtCityNameView"
-            android:layout_width="70dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="@{state.weatherCondition}"
-            android:layout_below="@+id/txtCityName"
+            android:layout_below="@+id/txtCountry"
             android:textAlignment="center"
             android:textSize="20dp"
             android:textColor="@android:color/white"/>

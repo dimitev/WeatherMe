@@ -163,6 +163,16 @@ public class CityInfo extends BaseObservable {
         notifyPropertyChanged(BR._all);
     }
 
+    public void setRegion(String region) {
+        this.region = region;
+        notifyPropertyChanged(BR._all);
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+        notifyPropertyChanged(BR._all);
+    }
+
     @Bindable
     public String getLastUpdated() {
         return lastUpdated;
@@ -248,19 +258,15 @@ public class CityInfo extends BaseObservable {
         return chanceOfRain;
     }
 
+    @Bindable
     public String getRegion() {
         return region;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
+    @Bindable
     public String getCountry() {
-        return country;
+        return this.country;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+
 }

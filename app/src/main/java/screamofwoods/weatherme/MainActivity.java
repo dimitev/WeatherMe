@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
         c.forecast.getMomentForecast();//gets some forecast
-        c.setCountry("BG");
+        c.setCountry("BG");//seems to disappear in cities drawer,probably due to async, hardcoded for now
         UserCities.add(c);
         UserCities.add(c);//adds a secondary city for testing
         prepareBinding();
