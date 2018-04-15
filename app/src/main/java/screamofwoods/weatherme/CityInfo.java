@@ -171,6 +171,12 @@ public class CityInfo extends BaseObservable {
     public void setCountry(String country) {
         this.country = country;
         notifyPropertyChanged(BR._all);
+        /*TODO make this work again - should be done in the main thread - or don't show country in side pannel
+         * now it is in the separate threads that make async calls
+         * Caught exception:
+         * android.view.ViewRootImpl$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views.
+         * Hope this helps!
+         */
         //MainActivity.mAdapter.notifyDataSetChanged();//updates the drawer to deal with the async
     }
 

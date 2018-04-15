@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mAdapter = new MyAdapter(UserCities);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+            //Change selected city from right hand side list
             @Override
             public void onClick(View view, int position) {
                 CityInfo city = UserCities.get(position);
@@ -78,7 +79,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 binding.setState(c);//sets the city to be shown in the activity_main
                 binding.currentContent.setState(c);
                 mDrawerLayoutCities.closeDrawer(Gravity.END);
+                //Kill the current Thread that is responsible for updating
                 weatherGetterPeriodically.interrupt();
+                //Create new Thread to update the newly selected city
                 weatherGetterPeriodically = new WeatherGetterPeriodically(c);
                 weatherGetterPeriodically.start();
             }
