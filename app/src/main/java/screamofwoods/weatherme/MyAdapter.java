@@ -1,5 +1,7 @@
 package screamofwoods.weatherme;
 
+import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,16 +10,23 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import screamofwoods.weatherme.databinding.SingleCityBinding;
+
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private List<CityInfo> mDataset;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView city, country;
+        private SingleCityBinding mBinding;
 
-        public MyViewHolder(View view) {
-            super(view);
-            city = (TextView) view.findViewById(R.id.city_name);
-            country = (TextView) view.findViewById(R.id.country);
+        public MyViewHolder(SingleCityBinding binding) {
+            super(binding.getRoot());
+            mBinding=binding;
+            //city = (TextView) view.findViewById(R.id.city_name);
+            //country = (TextView) view.findViewById(R.id.country);
+        }
+        public void bind(@NonNull CityInfo city) {
+            mBinding.setCity(city);
+            mBinding.executePendingBindings();
         }
     }
 
@@ -29,16 +38,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     // Create new views (invoked by the layout manager)
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_city, parent, false);
-
-        return new MyViewHolder(itemView);
+        LayoutInflater itemView = LayoutInflater.from(parent.getContext());
+        SingleCityBinding binding = DataBindingUtil.inflate(itemView, R.layout.single_city, parent, false);
+        return new MyViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         CityInfo city = mDataset.get(position);
-        holder.city.setText(city.getName());
-        holder.country.setText(city.getCountry());
+        holder.bind(city);
+        /*holder.city.setText(city.getName());
+        holder.country.setText(city.getCountry());*/
     }
 
     // Return the size of your dataset (invoked by the layout manager)
