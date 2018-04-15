@@ -80,11 +80,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 binding.setState(c);//sets the city to be shown in the activity_main
                 binding.currentContent.setState(c);
                 mDrawerLayoutCities.closeDrawer(Gravity.END);
-                WeatherGetterOnce wgo = new WeatherGetterOnce(c);
-                wgo.start();
-                /*weatherGetterPeriodically.interrupt();
+                //new WeatherGetterOnce(c).start();
+
+                weatherGetterPeriodically.interrupt();
                 weatherGetterPeriodically = new WeatherGetterPeriodically(c);
-                weatherGetterPeriodically.start();*/
+                weatherGetterPeriodically.start();
             }
 
             @Override
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayoutCities.addDrawerListener(new DrawerLayout.DrawerListener() {// handles events
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-                MainActivity.mAdapter.notifyDataSetChanged();//updates the drawer to deal with the async
+                //MainActivity.mAdapter.notifyDataSetChanged();//updates the drawer to deal with the async
             }
 
             @Override
