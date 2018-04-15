@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // specify an adapter
         mAdapter = new MyAdapter(UserCities);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                CityInfo city = UserCities.get(position);
+                Toast.makeText(getApplicationContext(), city.getName() + " is selected!", Toast.LENGTH_SHORT).show();
+                c=city;
+                binding.setState(c);//sets the city to be shown in the activity_main
+                binding.currentContent.setState(c);
+                mDrawerLayoutCities.closeDrawer(Gravity.END);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
     }
 
     private void prepareBinding() {
