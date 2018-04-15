@@ -27,22 +27,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static ActivityMainBinding binding;//the binding between the classes and UI
     public CityInfo c;//test city-current city
-    public List<CityInfo> UserCities=new ArrayList<CityInfo>();//list of user cities,should be saved on restart
+    public List<CityInfo> UserCities = new ArrayList<CityInfo>();//list of user cities,should be saved on restart
     private ActionBarDrawerToggle mDrawerToggle;//holds info for the toolbar
     private DrawerLayout mDrawerLayout;//the left drawer
     private DrawerLayout mDrawerLayoutCities;//the right drawer
     private RecyclerView mRecyclerView;//for the list of cities
-    private RecyclerView.Adapter mAdapter;//for the list of cities
+    public static RecyclerView.Adapter mAdapter;//for the list of cities
     private RecyclerView.LayoutManager mLayoutManager;//for the list of cities
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        c = new CityInfo("Plovdiv", (float) 0, (float) 0, true);
+        c.forecast.getMomentForecast();//gets some forecast
+        UserCities.add(c);
         c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
         c.forecast.getMomentForecast();//gets some forecast
-        c.setCountry("BG");//seems to disappear in cities drawer,probably due to async, hardcoded for now
-        UserCities.add(c);
         UserCities.add(c);//adds a secondary city for testing
         prepareBinding();
         prepareToolbar();
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void prepareRecycler() {
-        mRecyclerView = (RecyclerView)binding.citiesDrawerHolder.citiesList;// findViewById(R.id.cities_list);
+        mRecyclerView = (RecyclerView) binding.citiesDrawerHolder.citiesList;// findViewById(R.id.cities_list);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
                 mDrawerLayout.closeDrawer(Gravity.START);//closes the other drawer of it was opened
+
             }
 
             @Override
