@@ -1,9 +1,8 @@
 package screamofwoods.weatherme;
 
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 
-import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.SyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -18,12 +17,12 @@ public class Forecast {
     private static final String BASE_URL = "http://api.apixu.com/v1/forecast.json";
     private static final String API_KEY = "9593a63a2df64b31bfe183434180204";
     private CityInfo city;
-    private AsyncHttpClient asyncHttpClient;
+    private SyncHttpClient syncHttpClient;
     private RequestParams requestParams;
 
     public Forecast(CityInfo city) {
         this.city = city;
-        asyncHttpClient = new AsyncHttpClient();
+        syncHttpClient = new SyncHttpClient();
         requestParams = new RequestParams();
         requestParams.add("key", API_KEY);
     }
@@ -46,7 +45,7 @@ public class Forecast {
             }
         }
         requestParams.add("hour", Integer.toString(currentHour));
-        asyncHttpClient.get(BASE_URL, requestParams, new JsonHttpResponseHandler(){
+        syncHttpClient.get(BASE_URL, requestParams, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response){
                 super.onSuccess(statusCode, headers, response);
@@ -84,12 +83,15 @@ public class Forecast {
     }
 
     public void getHourlyForecast(){
+        if(requestParams.has("hour")){
+            requestParams.remove("hour");
+        }
         if(!(city.getName().isEmpty())) {
             requestParams.add("q", city.getName());
         } else {
             requestParams.add("q", Float.toString(city.getLat()) + "," + Float.toString(city.getLon()));
         }
-        asyncHttpClient.get(BASE_URL, requestParams, new JsonHttpResponseHandler(){
+        syncHttpClient.get(BASE_URL, requestParams, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -97,7 +99,6 @@ public class Forecast {
                 String[] weatherConditionHourly = new String[24];
                 float[] temperatureHourly = new float[24];
                 int[] chanceOfRainHourly = new int[24];
-                Log.e("Success", "ARI WA");
                 try {
                     hourlyForecastJSON = response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONArray("hour");
                     if(city.getIsMetric())
@@ -106,7 +107,6 @@ public class Forecast {
                             temperatureHourly[i] = (float) hourlyForecastJSON.optJSONObject(i).getDouble("temp_c");
                             chanceOfRainHourly[i] = hourlyForecastJSON.optJSONObject(i).getInt("chance_of_rain");
                             weatherConditionHourly[i] = hourlyForecastJSON.optJSONObject(i).getJSONObject("condition").getString("text");
-                            Log.e("Hour:", i + weatherConditionHourly[i]);
                         }
                     } else {
                         for(int i = 0; i < 24; i++){

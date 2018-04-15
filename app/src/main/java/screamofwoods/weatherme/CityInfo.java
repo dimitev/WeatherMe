@@ -171,7 +171,7 @@ public class CityInfo extends BaseObservable {
     public void setCountry(String country) {
         this.country = country;
         notifyPropertyChanged(BR._all);
-        MainActivity.mAdapter.notifyDataSetChanged();//updates the drawer to deal with the async
+        //MainActivity.mAdapter.notifyDataSetChanged();//updates the drawer to deal with the async
     }
 
     @Bindable

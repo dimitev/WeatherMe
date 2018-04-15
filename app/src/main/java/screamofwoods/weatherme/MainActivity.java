@@ -35,22 +35,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView mRecyclerView;//for the list of cities
     public static RecyclerView.Adapter mAdapter;//for the list of cities
     private RecyclerView.LayoutManager mLayoutManager;//for the list of cities
+    private WeatherGetterPeriodically weatherGetterPeriodically;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        c = new CityInfo("Plovdiv", (float) 0, (float) 0, true);
-        c.forecast.getMomentForecast();//gets some forecast
+        c =  new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
+        //c.forecast.getMomentForecast();//gets some forecast
         UserCities.add(c);
-        c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
-        c.forecast.getMomentForecast();//gets some forecast
-        UserCities.add(c);//adds a secondary city for testing
+        CityInfo d =new CityInfo("Plovdiv", (float) 0, (float) 0, true);
+        //c.forecast.getMomentForecast();//gets some forecast
+        UserCities.add(d);//adds a secondary city for testing
         prepareBinding();
         prepareToolbar();
         prepareDrawer();
         prepareRecycler();//fills the cities drawer
         mAdapter.notifyDataSetChanged();//updates the drawer
+        updateForecast();
+    }
 
+    private void updateForecast(){
+
+        weatherGetterPeriodically  = new WeatherGetterPeriodically(c);
+        weatherGetterPeriodically.start();
     }
 
     private void prepareRecycler() {
@@ -71,8 +78,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 binding.setState(c);//sets the city to be shown in the activity_main
                 binding.currentContent.setState(c);
                 mDrawerLayoutCities.closeDrawer(Gravity.END);
+                weatherGetterPeriodically.interrupt();
+                weatherGetterPeriodically = new WeatherGetterPeriodically(c);
+                weatherGetterPeriodically.start();
             }
-
             @Override
             public void onLongClick(View view, int position) {
 
@@ -89,7 +98,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onRefresh() {
                         binding.swiperefresh.setRefreshing(true);//changes the state of the icon
-                        c.forecast.getMomentForecast();
+                        WeatherGetterOnce wgo = new WeatherGetterOnce(c);
+                        wgo.start();
                         binding.swiperefresh.setRefreshing(false);
                     }
                 }
