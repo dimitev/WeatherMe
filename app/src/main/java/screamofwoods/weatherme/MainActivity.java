@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import screamofwoods.weatherme.databinding.ActivityMainBinding;
 
@@ -28,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static ActivityMainBinding binding;//the binding between the classes and UI
     public CityInfo c;//test city-current city
-    public List<CityInfo> UserCities = new ArrayList<CityInfo>();//list of user cities,should be saved on restart
+    public ArrayList<CityInfo> UserCities = new ArrayList<CityInfo>();//list of user cities,should be saved on restart
     private ActionBarDrawerToggle mDrawerToggle;//holds info for the toolbar
     private DrawerLayout mDrawerLayout;//the left drawer
     private DrawerLayout mDrawerLayoutCities;//the right drawer
