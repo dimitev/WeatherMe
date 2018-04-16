@@ -89,5 +89,25 @@
             android:textAlignment="center"
             android:textSize="40dp"
             android:textColor="@android:color/white"/>
+        <TextView
+            android:id="@+id/txtCityUpdatedView"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/txtCityWind"
+            android:layout_centerHorizontal="true"
+            android:text="updated:"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/txtCityUpdated"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_below="@+id/txtCityUpdatedView"
+            android:layout_centerHorizontal="true"
+            android:text="@{state.lastUpdated}"
+            android:textAlignment="center"
+            android:textSize="16dp"
+            android:textColor="@android:color/white"/>
     </RelativeLayout>
 </layout>
