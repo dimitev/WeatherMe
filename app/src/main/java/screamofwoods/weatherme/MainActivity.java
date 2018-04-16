@@ -40,23 +40,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        c =  new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
+        c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
         //c.forecast.getMomentForecast();//gets some forecast
+        new WeatherGetterOnce(c).start();
         UserCities.add(c);
-        CityInfo d =new CityInfo("Plovdiv", (float) 0, (float) 0, true);
-        //c.forecast.getMomentForecast();//gets some forecast
+        CityInfo d = new CityInfo("Plovdiv", (float) 0, (float) 0, true);
+        //d.forecast.getMomentForecast();//gets some forecast
+        new WeatherGetterOnce(d).start();
         UserCities.add(d);//adds a secondary city for testing
         prepareBinding();
         prepareToolbar();
         prepareDrawer();
         prepareRecycler();//fills the cities drawer
         mAdapter.notifyDataSetChanged();//updates the drawer
-        updateForecast();
+        backgroundUpdateForecast();
     }
 
-    private void updateForecast(){
+    private void backgroundUpdateForecast() {
 
-        weatherGetterPeriodically  = new WeatherGetterPeriodically(c);
+        weatherGetterPeriodically = new WeatherGetterPeriodically(c);
         weatherGetterPeriodically.start();
     }
 
@@ -75,16 +77,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View view, int position) {
                 CityInfo city = UserCities.get(position);
                 Toast.makeText(getApplicationContext(), city.getName() + " is selected!", Toast.LENGTH_SHORT).show();
-                c=city;
+                c = city;
                 binding.setState(c);//sets the city to be shown in the activity_main
                 binding.currentContent.setState(c);
                 mDrawerLayoutCities.closeDrawer(Gravity.END);
                 //Kill the current Thread that is responsible for updating
+                //new WeatherGetterOnce(c).start();
                 weatherGetterPeriodically.interrupt();
                 //Create new Thread to update the newly selected city
                 weatherGetterPeriodically = new WeatherGetterPeriodically(c);
                 weatherGetterPeriodically.start();
             }
+
             @Override
             public void onLongClick(View view, int position) {
 
@@ -144,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayoutCities.addDrawerListener(new DrawerLayout.DrawerListener() {// handles events
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
+                //MainActivity.mAdapter.notifyDataSetChanged();//updates the drawer to deal with the async
             }
 
             @Override
