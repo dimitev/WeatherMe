@@ -6,8 +6,9 @@ import android.databinding.Bindable;
 import java.io.Serializable;
 
 public class CityInfo extends BaseObservable implements Serializable {
-    //private SearchForCity searchForCity;
-    public Forecast forecast;
+    //Class vars starting with transient are NOT due to serialization!!!
+    //transient private SearchForCity searchForCity;
+    transient public Forecast forecast;
     private String lastUpdated;
     private String[] weatherConditionHourly;
     private float[] temperatureHourly;
@@ -60,11 +61,25 @@ public class CityInfo extends BaseObservable implements Serializable {
         notifyPropertyChanged(BR._all);
     }
 
+    //In order to serialize the object properly
+    @Override
+    public String toString(){
+        return "CityInfo[lastUpdated=" + lastUpdated + ", weatherConditionHourly=" + weatherConditionHourly.toString() +
+                ", temperatureHourly=" + temperatureHourly.toString() + ", chanceOfRainHourly=" + chanceOfRainHourly.toString() +
+                ", name=" + name + ", region=" + region + ", country=" + country +
+                ", weatherCondition=" + weatherCondition + ", windDirection=" + windDirection +
+                ", cloudCoverage=" + cloudCoverage+ ", currentTemperature=" + currentTemperature +
+                ", minimumTemperature=" + minimumTemperature + ", maximumTemperature=" + maximumTemperature +
+                ", windSpeed=" + windSpeed+ ", atmPressure=" + atmPressure +
+                ", lat=" + lat + ", lon=" + lon + ", uvIndex=" + uvIndex +
+                ", humidity=" + humidity + ", chanceOfRain=" + chanceOfRain + ", isMetric=" + isMetric + ", isDay=" + isDay +
+                "]";
+    }
+
     public void setLastUpdated(String lastUpdated) {
         this.lastUpdated = lastUpdated;
         notifyPropertyChanged(BR._all);
     }
-
 
     public void setName(String name) {
         this.name = name;

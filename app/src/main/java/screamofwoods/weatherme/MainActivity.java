@@ -44,20 +44,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Constructor to run code once only @ the beginning of the App
     public MainActivity() {
         super();
-        c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
-        backgroundUpdateForecast();
         cityInfoSaveInstance = new CityInfoSaveInstance(this);
-        new WeatherGetterOnce(c).start();
-        UserCities.add(c);
-        CityInfo d = new CityInfo("Plovdiv", (float) 0, (float) 0, true);
-        new WeatherGetterOnce(d).start();
-        UserCities.add(d);//adds a secondary city for testing
-        //CityInfoSaveInstance.readCitiesList();
+        //cityInfoSaveInstance.readCitiesList();
+        //c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
+        //backgroundUpdateForecast();
+        //new WeatherGetterOnce(c).start();
+        //UserCities.add(c);
+        //CityInfo d = new CityInfo("Plovdiv", (float) 0, (float) 0, true);
+        //new WeatherGetterOnce(d).start();
+        //UserCities.add(d);//adds a secondary city for testing
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        cityInfoSaveInstance.readCitiesList();
+
+        //backgroundUpdateForecast();
         //c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
         //c.forecast.getMomentForecast();//gets some forecast
 
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         prepareLeftDrawer();
         prepareRecycler();//fills the cities drawer
         mAdapter.notifyDataSetChanged();//updates the drawer
-        cityInfoSaveInstance.saveCitiesList();
+        //cityInfoSaveInstance.saveCitiesList();
     }
 
     private void backgroundUpdateForecast() {

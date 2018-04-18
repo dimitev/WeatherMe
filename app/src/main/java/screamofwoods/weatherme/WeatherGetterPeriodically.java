@@ -18,6 +18,7 @@ public class WeatherGetterPeriodically extends Thread {
             //Used to start the AsyncTask and pass parameters to it
             handler.post(new Runnable() {
                 public void run() {
+                    Log.e("Updating periodically", city.getName());
                     new UpdateForecastAsync().execute(city);//starting the asynctask
                 }
             });

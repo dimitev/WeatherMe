@@ -51,7 +51,8 @@ public class CityInfoSaveInstance extends Application {
     public void readCitiesList(){
         try
         {
-            FileInputStream fis = openFileInput(FILENAME);
+            File f = new File(appContext.getFilesDir(), FILENAME);
+            FileInputStream fis = new FileInputStream(f);
             ObjectInputStream ois = new ObjectInputStream(fis);
             userCities = (ArrayList) ois.readObject();
             if(userCities.isEmpty()) {
@@ -59,6 +60,13 @@ public class CityInfoSaveInstance extends Application {
                 //currentCity = new CityInfo(lat, lon);
                 //MainActivity.c = currentCity;
                 //instantiate current city to be the city with current coordinates
+            } else {
+                //TODO for every city implement new Forecast object or try to serialize it too!!!
+                currentCity = userCities.get(userCities.size()-1);
+                currentCity.forecast = new Forecast(currentCity);
+                userCities.remove(userCities.size()-1);
+                MainActivity.UserCities = userCities;
+                MainActivity.c = currentCity;
             }
             ois.close();
             fis.close();
