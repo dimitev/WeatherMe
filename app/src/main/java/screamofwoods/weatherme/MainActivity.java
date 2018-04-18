@@ -183,8 +183,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(this, AddCitiesActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
+                startActivity(intent);
             }
         });
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
