@@ -63,6 +63,12 @@ public class Forecast {
                     city.setWeatherCondition(response.getJSONObject("current").getJSONObject("condition").getString("text"));
                     city.setWindDirection(response.getJSONObject("current").getString("wind_dir"));
                     city.setCloudCoverage(response.getJSONObject("current").getInt("cloud"));
+                    int isDay = response.getJSONObject("current").getInt("is_day");
+                    if(1 == isDay){
+                        city.setDay(true);
+                    } else {
+                        city.setDay(false);
+                    }
                     if(city.getIsMetric()){
                         city.setCurrentTemperature((float) response.getJSONObject("current").getDouble("temp_c"));
                         city.setWindSpeed((float) response.getJSONObject("current").getDouble("wind_kph"));

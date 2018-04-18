@@ -27,6 +27,7 @@ public class CityInfo extends BaseObservable {
     private int humidity;
     private int chanceOfRain;
     private boolean isMetric;
+    private boolean isDay;
 
     public CityInfo() {
 
@@ -171,6 +172,14 @@ public class CityInfo extends BaseObservable {
     public void setCountry(String country) {
         this.country = country;
         notifyPropertyChanged(BR._all);
+    }
+
+    public boolean getIsDay() {
+        return isDay;
+    }
+
+    public void setDay(boolean day) {
+        isDay = day;
     }
 
     @Bindable
