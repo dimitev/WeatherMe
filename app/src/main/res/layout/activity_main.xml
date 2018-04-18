@@ -42,9 +42,35 @@
                 android:fitsSystemWindows="true"
                 tools:openDrawer="end">
 
-                <include
-                    android:id="@+id/current_content"
-                    layout="@layout/current_content" />
+                <LinearLayout
+                    android:id="@+id/current"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include
+                        android:id="@+id/current_content"
+                        layout="@layout/current_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/hourly"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include
+                        android:id="@+id/hourly_content"
+                        layout="@layout/hourly_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/five_day"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include
+                        android:id="@+id/five_day_content"
+                        layout="@layout/five_day_content" />
+                </LinearLayout>
 
                 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/swiperefresh"
@@ -76,9 +102,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
-                android:fitsSystemWindows="true"
+                android:fitsSystemWindows="true">
 
-                app:menu="@menu/activity_main_drawer" />
+                <include
+                    android:id="@+id/forecast_type_drawer_holder"
+                    layout="@layout/forecast_type_drawer_holder" />
+            </android.support.design.widget.NavigationView>
 
 
         </android.support.v4.widget.DrawerLayout>

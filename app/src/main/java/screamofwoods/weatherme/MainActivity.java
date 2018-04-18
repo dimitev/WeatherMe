@@ -13,10 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -35,22 +37,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView mRecyclerView;//for the list of cities
     public static RecyclerView.Adapter mAdapter;//for the list of cities
     private RecyclerView.LayoutManager mLayoutManager;//for the list of cities
-    private WeatherGetterPeriodically weatherGetterPeriodically;
+    private WeatherGetterPeriodically weatherGetterPeriodically;//the background service for updating
+    private CityInfo extraCity;//extra city for casual logic
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
-        //c.forecast.getMomentForecast();//gets some forecast
         new WeatherGetterOnce(c).start();
         UserCities.add(c);
         CityInfo d = new CityInfo("Plovdiv", (float) 0, (float) 0, true);
-        //d.forecast.getMomentForecast();//gets some forecast
         new WeatherGetterOnce(d).start();
         UserCities.add(d);//adds a secondary city for testing
         prepareBinding();
         prepareToolbar();
-        prepareDrawer();
+        prepareRightDrawer();
+        prepareLeftDrawer();
         prepareRecycler();//fills the cities drawer
         mAdapter.notifyDataSetChanged();//updates the drawer
         backgroundUpdateForecast();
@@ -75,12 +77,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view, int position) {
                 CityInfo city = UserCities.get(position);
-                Toast.makeText(getApplicationContext(), city.getName() + " is selected!", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(), city.getName() + " is selected!", Toast.LENGTH_SHORT).show();
                 c = city;
                 binding.setState(c);//sets the city to be shown in the activity_main
                 binding.currentContent.setState(c);
                 mDrawerLayoutCities.closeDrawer(Gravity.END);
-                //new WeatherGetterOnce(c).start();
 
                 weatherGetterPeriodically.interrupt();
                 weatherGetterPeriodically = new WeatherGetterPeriodically(c);
@@ -90,8 +91,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onLongClick(View view, int position) {
 
+                extraCity = UserCities.get(position);
+                //Toast.makeText(getApplicationContext(), extraCity.getName() + " settings!", Toast.LENGTH_SHORT).show();
+                registerForContextMenu(view);
+                openContextMenu(view);
+                unregisterForContextMenu(view);
             }
         }));
+    }
+
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        getMenuInflater().inflate(R.menu.city_options, menu);
+    }
+
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete_city: {
+                UserCities.remove(extraCity);
+                //Toast.makeText(getApplicationContext(),extraCity.getName()+" removed", Toast.LENGTH_SHORT).show();
+                if (UserCities.size() == 0) {
+                    Toast.makeText(getApplicationContext(), "No remaining cities", Toast.LENGTH_LONG).show();
+                    weatherGetterPeriodically.interrupt();
+                    c.setName("No city");
+                    c.setCountry("showing last info");
+                } else {
+                    c = UserCities.get(0);
+                    binding.setState(c);
+                    binding.currentContent.setState(c);
+                    binding.hourlyContent.setState(c);
+                    binding.fiveDayContent.setState(c);
+                    weatherGetterPeriodically.interrupt();
+                    weatherGetterPeriodically = new WeatherGetterPeriodically(c);
+                    weatherGetterPeriodically.start();
+                }
+                mAdapter.notifyDataSetChanged();
+
+                return true;
+            }
+            case R.id.cancel:
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     private void prepareBinding() {
@@ -120,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void prepareDrawer() {
+    private void prepareRightDrawer() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);//sets up the left drawer
         mDrawerLayoutCities = (DrawerLayout) findViewById(R.id.drawer_layoutcities);//sets up the right drawer
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -163,6 +204,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDrawerStateChanged(int newState) {
 
+            }
+        });
+    }
+
+    private void prepareLeftDrawer() {
+        TextView current = findViewById(R.id.txtCurrent);
+        TextView hourly = findViewById(R.id.txtHourly);
+        TextView fiveday = findViewById(R.id.txtFiveday);
+        binding.hourly.setVisibility(View.INVISIBLE);//sets the visible page
+        binding.fiveDay.setVisibility(View.INVISIBLE);//
+        binding.current.setVisibility(View.VISIBLE);//
+        current.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.closeDrawer(Gravity.START);
+                binding.hourly.setVisibility(View.INVISIBLE);
+                binding.fiveDay.setVisibility(View.INVISIBLE);
+                binding.current.setVisibility(View.VISIBLE);
+            }
+        });
+        hourly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.current.setVisibility(View.INVISIBLE);
+                binding.hourly.setVisibility(View.VISIBLE);
+                binding.fiveDay.setVisibility(View.INVISIBLE);
+                mDrawerLayout.closeDrawer(Gravity.START);
+            }
+        });
+        fiveday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.closeDrawer(Gravity.START);
+                binding.hourly.setVisibility(View.INVISIBLE);
+                binding.fiveDay.setVisibility(View.VISIBLE);
+                binding.current.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -230,7 +307,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {//handles the click in drawer
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);//closes the drawer upon click
         drawer.closeDrawer(GravityCompat.START);

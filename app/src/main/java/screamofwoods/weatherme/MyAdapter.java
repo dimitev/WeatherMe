@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -21,13 +22,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         public MyViewHolder(SingleCityBinding binding) {
             super(binding.getRoot());
             mBinding=binding;
-            //city = (TextView) view.findViewById(R.id.city_name);
-            //country = (TextView) view.findViewById(R.id.country);
         }
         public void bind(@NonNull CityInfo city) {
             mBinding.setCity(city);
             mBinding.executePendingBindings();
+
         }
+
     }
 
     public MyAdapter(List<CityInfo> cities) {
@@ -40,6 +41,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater itemView = LayoutInflater.from(parent.getContext());
         SingleCityBinding binding = DataBindingUtil.inflate(itemView, R.layout.single_city, parent, false);
+
         return new MyViewHolder(binding);
     }
 
@@ -47,8 +49,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public void onBindViewHolder(MyViewHolder holder, int position) {
         CityInfo city = mDataset.get(position);
         holder.bind(city);
-        /*holder.city.setText(city.getName());
-        holder.country.setText(city.getCountry());*/
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -9,6 +9,7 @@
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/single_city_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="5dp"
@@ -28,7 +29,7 @@
             android:paddingTop="10dp"
             android:textColor="@android:color/white"
             android:textSize="30dp"
-            android:textStyle="bold"
+
             android:text="@{city.name}"/>
 
         <TextView
@@ -38,7 +39,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:textColor="@android:color/white"
-            android:textSize="23dp"
+            android:textSize="18dp"
             android:text="@{city.country}"/>
 
     </RelativeLayout>
