@@ -26,8 +26,8 @@ import screamofwoods.weatherme.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static ActivityMainBinding binding;//the binding between the classes and UI
-    public CityInfo c;//test city-current city
-    public ArrayList<CityInfo> UserCities = new ArrayList<CityInfo>();//list of user cities,should be saved on restart
+    public static CityInfo c;//test city-current city
+    public static ArrayList<CityInfo> UserCities = new ArrayList<CityInfo>();//list of user cities,should be saved on restart
     private ActionBarDrawerToggle mDrawerToggle;//holds info for the toolbar
     private DrawerLayout mDrawerLayout;//the left drawer
     private DrawerLayout mDrawerLayoutCities;//the right drawer
@@ -35,11 +35,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static RecyclerView.Adapter mAdapter;//for the list of cities
     private RecyclerView.LayoutManager mLayoutManager;//for the list of cities
     private WeatherGetterPeriodically weatherGetterPeriodically;
+    private CityInfoSaveInstance cityInfoSaveInstance;
+
+    //Constructor to run code once only @ the beginning of the App
+    public MainActivity(){
+        super();
+        c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
+        backgroundUpdateForecast();
+        cityInfoSaveInstance = new CityInfoSaveInstance(this);
+        //CityInfoSaveInstance.readCitiesList();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
         //c.forecast.getMomentForecast();//gets some forecast
         new WeatherGetterOnce(c).start();
         UserCities.add(c);
@@ -52,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         prepareDrawer();
         prepareRecycler();//fills the cities drawer
         mAdapter.notifyDataSetChanged();//updates the drawer
-        backgroundUpdateForecast();
+        cityInfoSaveInstance.saveCitiesList();
     }
 
     private void backgroundUpdateForecast() {

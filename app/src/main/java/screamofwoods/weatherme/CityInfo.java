@@ -3,7 +3,9 @@ package screamofwoods.weatherme;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-public class CityInfo extends BaseObservable {
+import java.io.Serializable;
+
+public class CityInfo extends BaseObservable implements Serializable {
     //private SearchForCity searchForCity;
     public Forecast forecast;
     private String lastUpdated;
