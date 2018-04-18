@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="state"
+            type="screamofwoods.weatherme.CityInfo" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#222222"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".MainActivity">
+
+
+        <TextView
+            android:id="@+id/txtInfo"
+            android:layout_width="match_parent"
+            android:layout_height="26dp"
+            android:layout_margin="10dp"
+            android:gravity="left"
+            android:text="Forecast  type"
+            android:textColor="@android:color/white"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/txtCurrent"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:background="#333333"
+            android:gravity="center"
+            android:text="Current"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/txtHourly"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:background="#333333"
+            android:gravity="center"
+            android:text="24 Hours"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/txtFiveday"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:background="#333333"
+            android:gravity="center"
+            android:text="5-day"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/txtInfo2"
+            android:layout_width="match_parent"
+            android:layout_height="26dp"
+            android:layout_margin="10dp"
+            android:gravity="left"
+            android:text="Miscellaneous"
+            android:textColor="@android:color/white"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/txtSettings"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:background="#333333"
+            android:gravity="center"
+            android:text="Settings"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/txtAbout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:background="#333333"
+            android:gravity="center"
+            android:text="About"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="20dp" />
+    </LinearLayout>
+</layout>

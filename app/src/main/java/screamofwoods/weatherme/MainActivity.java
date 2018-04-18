@@ -1,5 +1,6 @@
 package screamofwoods.weatherme;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -36,30 +37,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView mRecyclerView;//for the list of cities
     public static RecyclerView.Adapter mAdapter;//for the list of cities
     private RecyclerView.LayoutManager mLayoutManager;//for the list of cities
-    private WeatherGetterPeriodically weatherGetterPeriodically;
+    private WeatherGetterPeriodically weatherGetterPeriodically;//the background service for updating
     private CityInfoSaveInstance cityInfoSaveInstance;
+    private CityInfo extraCity;//extra city for casual logic
 
     //Constructor to run code once only @ the beginning of the App
-    public MainActivity(){
+    public MainActivity() {
         super();
         c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
         backgroundUpdateForecast();
         cityInfoSaveInstance = new CityInfoSaveInstance(this);
-        //CityInfoSaveInstance.readCitiesList();
-    }
-    private WeatherGetterPeriodically weatherGetterPeriodically;//the background service for updating
-    private CityInfo extraCity;//extra city for casual logic
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
-        //c.forecast.getMomentForecast();//gets some forecast
         new WeatherGetterOnce(c).start();
         UserCities.add(c);
         CityInfo d = new CityInfo("Plovdiv", (float) 0, (float) 0, true);
         new WeatherGetterOnce(d).start();
         UserCities.add(d);//adds a secondary city for testing
+        //CityInfoSaveInstance.readCitiesList();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
+        //c.forecast.getMomentForecast();//gets some forecast
+
         prepareBinding();
         prepareToolbar();
         prepareRightDrawer();
@@ -178,6 +179,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void prepareRightDrawer() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);//sets up the left drawer
         mDrawerLayoutCities = (DrawerLayout) findViewById(R.id.drawer_layoutcities);//sets up the right drawer
+        TextView add= findViewById(R.id.add_city);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(this, AddCitiesActivity.class);
+                //startActivity(intent);
+            }
+        });
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 

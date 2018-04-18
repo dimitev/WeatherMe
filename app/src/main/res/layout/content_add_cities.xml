@@ -8,4 +8,13 @@
     tools:context=".AddCitiesActivity"
     tools:showIn="@layout/activity_add_cities">
 
+    <TextView
+        android:id="@+id/textView"
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text=""
+        android:hint="Search city"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
 </android.support.constraint.ConstraintLayout>
