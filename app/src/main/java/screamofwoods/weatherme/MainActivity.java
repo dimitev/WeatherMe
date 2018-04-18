@@ -22,21 +22,31 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import screamofwoods.weatherme.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static ActivityMainBinding binding;//the binding between the classes and UI
-    public CityInfo c;//test city-current city
-    public List<CityInfo> UserCities = new ArrayList<CityInfo>();//list of user cities,should be saved on restart
+    public static CityInfo c;//test city-current city
+    public static ArrayList<CityInfo> UserCities = new ArrayList<CityInfo>();//list of user cities,should be saved on restart
     private ActionBarDrawerToggle mDrawerToggle;//holds info for the toolbar
     private DrawerLayout mDrawerLayout;//the left drawer
     private DrawerLayout mDrawerLayoutCities;//the right drawer
     private RecyclerView mRecyclerView;//for the list of cities
     public static RecyclerView.Adapter mAdapter;//for the list of cities
     private RecyclerView.LayoutManager mLayoutManager;//for the list of cities
+    private WeatherGetterPeriodically weatherGetterPeriodically;
+    private CityInfoSaveInstance cityInfoSaveInstance;
+
+    //Constructor to run code once only @ the beginning of the App
+    public MainActivity(){
+        super();
+        c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
+        backgroundUpdateForecast();
+        cityInfoSaveInstance = new CityInfoSaveInstance(this);
+        //CityInfoSaveInstance.readCitiesList();
+    }
     private WeatherGetterPeriodically weatherGetterPeriodically;//the background service for updating
     private CityInfo extraCity;//extra city for casual logic
 
@@ -44,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
+        //c.forecast.getMomentForecast();//gets some forecast
         new WeatherGetterOnce(c).start();
         UserCities.add(c);
         CityInfo d = new CityInfo("Plovdiv", (float) 0, (float) 0, true);
@@ -55,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         prepareLeftDrawer();
         prepareRecycler();//fills the cities drawer
         mAdapter.notifyDataSetChanged();//updates the drawer
-        backgroundUpdateForecast();
+        cityInfoSaveInstance.saveCitiesList();
     }
 
     private void backgroundUpdateForecast() {
@@ -74,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mAdapter = new MyAdapter(UserCities);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+            //Change selected city from right hand side list
             @Override
             public void onClick(View view, int position) {
                 CityInfo city = UserCities.get(position);
@@ -82,8 +94,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 binding.setState(c);//sets the city to be shown in the activity_main
                 binding.currentContent.setState(c);
                 mDrawerLayoutCities.closeDrawer(Gravity.END);
-
+                //Kill the current Thread that is responsible for updating
+                //new WeatherGetterOnce(c).start();
                 weatherGetterPeriodically.interrupt();
+                //Create new Thread to update the newly selected city
                 weatherGetterPeriodically = new WeatherGetterPeriodically(c);
                 weatherGetterPeriodically.start();
             }
