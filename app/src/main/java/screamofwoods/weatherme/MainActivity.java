@@ -26,6 +26,10 @@ import java.util.ArrayList;
 
 import screamofwoods.weatherme.databinding.ActivityMainBinding;
 
+//TODO check internet connectivity in the threads for updates
+//TODO remove current from list -> last element -> not working properly
+//TODO check if the file doesn't exist or the list is empty -> fileMotFoundException -> GPS coordinates
+//TODO GPS Coordinates via android gps services
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static ActivityMainBinding binding;//the binding between the classes and UI
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         cityInfoSaveInstance.readCitiesList();
 
-        //backgroundUpdateForecast();
+        backgroundUpdateForecast();
         //c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
         //c.forecast.getMomentForecast();//gets some forecast
 
@@ -73,9 +77,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //cityInfoSaveInstance.saveCitiesList();
     }
 
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        cityInfoSaveInstance.saveCitiesList();
+    }
+
     private void backgroundUpdateForecast() {
 
         weatherGetterPeriodically = new WeatherGetterPeriodically(c);
+        weatherGetterPeriodically.setDaemon(true);
         weatherGetterPeriodically.start();
     }
 

@@ -63,8 +63,9 @@ public class CityInfoSaveInstance extends Application {
             } else {
                 //TODO for every city implement new Forecast object or try to serialize it too!!!
                 currentCity = userCities.get(userCities.size()-1);
-                currentCity.forecast = new Forecast(currentCity);
-                userCities.remove(userCities.size()-1);
+                //currentCity.forecast = new Forecast(currentCity);
+                //userCities.remove(userCities.size()-1);
+                Log.e("UserCities", userCities.toString());
                 MainActivity.UserCities = userCities;
                 MainActivity.c = currentCity;
             }

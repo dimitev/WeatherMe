@@ -11,25 +11,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 import cz.msebera.android.httpclient.Header;
 
-public class Forecast {
+public class Forecast implements Serializable{
+    private static final long serialVersionUID = 2;
     private static final String BASE_URL = "http://api.apixu.com/v1/forecast.json";
     private static final String API_KEY = "9593a63a2df64b31bfe183434180204";
-    private CityInfo city;
-    private SyncHttpClient syncHttpClient;
-    private RequestParams requestParams;
+    transient private SyncHttpClient syncHttpClient;
+    transient private RequestParams requestParams;
 
-    public Forecast(CityInfo city) {
-        this.city = city;
-        syncHttpClient = new SyncHttpClient();
-        requestParams = new RequestParams();
-        requestParams.add("key", API_KEY);
+    @Override
+    public String toString(){
+        return "Forecast[BASE_URL=" + BASE_URL + ", API_KEY=" + API_KEY + "]";
     }
 
     //Update the current weather for a city
-    public void getMomentForecast()
+    public void getMomentForecast(final CityInfo city)
     {
+        syncHttpClient = new SyncHttpClient();
+        requestParams = new RequestParams();
+        requestParams.add("key", API_KEY);
         if(!(city.getName().isEmpty())) {
             requestParams.add("q", city.getName());
         } else {
@@ -88,7 +91,10 @@ public class Forecast {
         //SwipeRefreshLayout sr=findViewById(R.id.swiperefresh);
     }
 
-    public void getHourlyForecast(){
+    public void getHourlyForecast(final CityInfo city){
+        syncHttpClient = new SyncHttpClient();
+        requestParams = new RequestParams();
+        requestParams.add("key", API_KEY);
         if(requestParams.has("hour")){
             requestParams.remove("hour");
         }

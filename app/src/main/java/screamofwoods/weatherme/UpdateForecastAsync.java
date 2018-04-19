@@ -9,8 +9,8 @@ public class UpdateForecastAsync extends AsyncTask<CityInfo, Void, Void> {
     @Override
     protected Void doInBackground(CityInfo... city) {
         //Connects to the REST api and updates the fields
-        city[0].forecast.getMomentForecast();
-        city[0].forecast.getHourlyForecast();
+        city[0].forecast.getMomentForecast(city[0]);
+        city[0].forecast.getHourlyForecast(city[0]);
         return null;
     }
 }

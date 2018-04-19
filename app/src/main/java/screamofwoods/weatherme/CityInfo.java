@@ -5,14 +5,13 @@ import android.databinding.Bindable;
 
 import java.io.Serializable;
 
-//TODO Serialize Forecast and SearchForCity classes
-//TODO @Override toString() method in both of the above classes
-//TODO Once those methods are overriden -> add the fields to this class' toString()
-//TODO Remove transient keywork!
+//TODO Serialize Forecast and SearchForCity classes -> done but is it working
+//TODO @Override toString() method in both of the above classes -> done but is it working
 public class CityInfo extends BaseObservable implements Serializable {
-    //Class vars starting with transient are NOT due to serialization!!!
-    //transient private SearchForCity searchForCity;
-    transient public Forecast forecast;
+    private static final long serialVersionUID = 1;
+    //transient vars are not due to serialization
+    transient private SearchForCity searchForCity;
+    public Forecast forecast;
     private String lastUpdated;
     private String[] weatherConditionHourly;
     private float[] temperatureHourly;
@@ -48,7 +47,7 @@ public class CityInfo extends BaseObservable implements Serializable {
         temperatureHourly = new float[24];
         chanceOfRainHourly = new int[24];
         this.isMetric = isMetric;
-        forecast = new Forecast(this);
+        forecast = new Forecast();
         //forecast.getHourlyForecast();
         notifyPropertyChanged(BR._all);
     }
@@ -60,7 +59,7 @@ public class CityInfo extends BaseObservable implements Serializable {
         temperatureHourly = new float[24];
         chanceOfRainHourly = new int[24];
         this.isMetric = isMetric;
-        forecast = new Forecast(this);
+        forecast = new Forecast();
         //forecast.getHourlyForecast();
         notifyPropertyChanged(BR._all);
     }
@@ -68,7 +67,7 @@ public class CityInfo extends BaseObservable implements Serializable {
     //In order to serialize the object properly
     @Override
     public String toString(){
-        return "CityInfo[lastUpdated=" + lastUpdated + ", weatherConditionHourly=" + weatherConditionHourly.toString() +
+        return "CityInfo[forecast=" + forecast.toString() + "lastUpdated=" + lastUpdated + ", weatherConditionHourly=" + weatherConditionHourly.toString() +
                 ", temperatureHourly=" + temperatureHourly.toString() + ", chanceOfRainHourly=" + chanceOfRainHourly.toString() +
                 ", name=" + name + ", region=" + region + ", country=" + country +
                 ", weatherCondition=" + weatherCondition + ", windDirection=" + windDirection +
