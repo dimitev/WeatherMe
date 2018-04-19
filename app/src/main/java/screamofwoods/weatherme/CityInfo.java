@@ -5,6 +5,10 @@ import android.databinding.Bindable;
 
 import java.io.Serializable;
 
+//TODO Serialize Forecast and SearchForCity classes
+//TODO @Override toString() method in both of the above classes
+//TODO Once those methods are overriden -> add the fields to this class' toString()
+//TODO Remove transient keywork!
 public class CityInfo extends BaseObservable implements Serializable {
     //Class vars starting with transient are NOT due to serialization!!!
     //transient private SearchForCity searchForCity;
