@@ -40,10 +40,7 @@ public class CityInfoSaveInstance extends Application {
             Log.e("Success in write", "Success");
             oos.close();
             fos.close();
-        }catch(NotSerializableException nse){
-            nse.printStackTrace();
-        }
-        catch(IOException ioe) {
+        } catch(IOException ioe) {
             Log.e("IOException write", ioe.toString());
         }
     }
@@ -61,11 +58,10 @@ public class CityInfoSaveInstance extends Application {
                 //MainActivity.c = currentCity;
                 //instantiate current city to be the city with current coordinates
             } else {
-                //TODO for every city implement new Forecast object or try to serialize it too!!!
                 currentCity = userCities.get(userCities.size()-1);
                 //currentCity.forecast = new Forecast(currentCity);
                 //userCities.remove(userCities.size()-1);
-                Log.e("UserCities", userCities.toString());
+                //Log.e("UserCities", userCities.toString());
                 MainActivity.UserCities = userCities;
                 MainActivity.c = currentCity;
             }

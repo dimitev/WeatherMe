@@ -1,5 +1,8 @@
 package screamofwoods.weatherme;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
@@ -35,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static ActivityMainBinding binding;//the binding between the classes and UI
     public static CityInfo c;//test city-current city
     public static ArrayList<CityInfo> UserCities = new ArrayList<CityInfo>();//list of user cities,should be saved on restart
+    private JobScheduler jobScheduler;
+    private JobInfo jobInfo;
     private ActionBarDrawerToggle mDrawerToggle;//holds info for the toolbar
     private DrawerLayout mDrawerLayout;//the left drawer
     private DrawerLayout mDrawerLayoutCities;//the right drawer
@@ -64,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         cityInfoSaveInstance.readCitiesList();
 
-        backgroundUpdateForecast();
+        //backgroundUpdateForecast();
         //c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
         //c.forecast.getMomentForecast();//gets some forecast
 
@@ -84,10 +89,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void backgroundUpdateForecast() {
-
-        weatherGetterPeriodically = new WeatherGetterPeriodically(c);
-        weatherGetterPeriodically.setDaemon(true);
-        weatherGetterPeriodically.start();
+        jobScheduler = (JobScheduler) getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE);
+        ComponentName componentName = new ComponentName(getApplicationContext(), WeatherGetterPeriodically.class);
+        jobInfo = new JobInfo.Builder(1, componentName)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setPeriodic(1000 * 60 * 15) //Every 15 mins
+                .build();
+        jobScheduler.schedule(jobInfo);
     }
 
     private void prepareRecycler() {
@@ -106,15 +114,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 CityInfo city = UserCities.get(position);
                 // Toast.makeText(getApplicationContext(), city.getName() + " is selected!", Toast.LENGTH_SHORT).show();
                 c = city;
+                WeatherGetterOnce wgo = new WeatherGetterOnce(c);
+                wgo.start();
                 binding.setState(c);//sets the city to be shown in the activity_main
                 binding.currentContent.setState(c);
                 mDrawerLayoutCities.closeDrawer(Gravity.END);
-                //Kill the current Thread that is responsible for updating
-                //new WeatherGetterOnce(c).start();
-                weatherGetterPeriodically.interrupt();
-                //Create new Thread to update the newly selected city
-                weatherGetterPeriodically = new WeatherGetterPeriodically(c);
-                weatherGetterPeriodically.start();
+                jobScheduler.cancel(1); //Cancel the current job that's responsible for updating
+                jobScheduler.schedule(jobInfo); //Reschedule the job
             }
 
             @Override
@@ -140,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //Toast.makeText(getApplicationContext(),extraCity.getName()+" removed", Toast.LENGTH_SHORT).show();
                 if (UserCities.size() == 0) {
                     Toast.makeText(getApplicationContext(), "No remaining cities", Toast.LENGTH_LONG).show();
-                    weatherGetterPeriodically.interrupt();
+                    jobScheduler.cancel(1);
                     c.setName("No city");
                     c.setCountry("showing last info");
                 } else {
@@ -149,9 +155,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     binding.currentContent.setState(c);
                     binding.hourlyContent.setState(c);
                     binding.fiveDayContent.setState(c);
-                    weatherGetterPeriodically.interrupt();
-                    weatherGetterPeriodically = new WeatherGetterPeriodically(c);
-                    weatherGetterPeriodically.start();
+                    jobScheduler.cancel(1);
+                    jobScheduler.schedule(jobInfo);
                 }
                 mAdapter.notifyDataSetChanged();
 
