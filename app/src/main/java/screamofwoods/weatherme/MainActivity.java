@@ -33,16 +33,17 @@ import screamofwoods.weatherme.databinding.ActivityMainBinding;
 //TODO remove current from list -> last element -> not working properly
 //TODO check if the file doesn't exist or the list is empty -> fileMotFoundException -> GPS coordinates
 //TODO GPS Coordinates via android gps services
+//TODO FIX jobScheduler NPE
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static ActivityMainBinding binding;//the binding between the classes and UI
     public static CityInfo c;//test city-current city
     public static ArrayList<CityInfo> UserCities = new ArrayList<CityInfo>();//list of user cities,should be saved on restart
-    private JobScheduler jobScheduler;
-    private JobInfo jobInfo;
+    private static JobScheduler jobScheduler;
+    private static JobInfo jobInfo;
     private ActionBarDrawerToggle mDrawerToggle;//holds info for the toolbar
     private DrawerLayout mDrawerLayout;//the left drawer
-    private DrawerLayout mDrawerLayoutCities;//the right drawer
+    private static DrawerLayout mDrawerLayoutCities;//the right drawer
     private RecyclerView mRecyclerView;//for the list of cities
     public static RecyclerView.Adapter mAdapter;//for the list of cities
     private RecyclerView.LayoutManager mLayoutManager;//for the list of cities
@@ -64,6 +65,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //UserCities.add(d);//adds a secondary city for testing
     }
 
+    public static void setCurrent(CityInfo in) {
+        c = in;
+        binding.setState(c);//sets the city to be shown in the activity_main
+        binding.currentContent.setState(c);
+        binding.hourlyContent.setState(c);
+        binding.fiveDayContent.setState(c);
+        mDrawerLayoutCities.closeDrawer(Gravity.END);
+        if (jobScheduler != null) {//TODO fix NPE here
+            jobScheduler.cancel(1); //Cancel the current job that's responsible for updating
+            jobScheduler.schedule(jobInfo); //Reschedule the job
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
         cityInfoSaveInstance.saveCitiesList();
     }
@@ -116,11 +130,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 c = city;
                 WeatherGetterOnce wgo = new WeatherGetterOnce(c);
                 wgo.start();
-                binding.setState(c);//sets the city to be shown in the activity_main
-                binding.currentContent.setState(c);
-                mDrawerLayoutCities.closeDrawer(Gravity.END);
-                jobScheduler.cancel(1); //Cancel the current job that's responsible for updating
-                jobScheduler.schedule(jobInfo); //Reschedule the job
+                setCurrent(c);
             }
 
             @Override
@@ -151,12 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     c.setCountry("showing last info");
                 } else {
                     c = UserCities.get(0);
-                    binding.setState(c);
-                    binding.currentContent.setState(c);
-                    binding.hourlyContent.setState(c);
-                    binding.fiveDayContent.setState(c);
-                    jobScheduler.cancel(1);
-                    jobScheduler.schedule(jobInfo);
+                    setCurrent(c);
                 }
                 mAdapter.notifyDataSetChanged();
 
@@ -178,8 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onRefresh() {
                         binding.swiperefresh.setRefreshing(true);//changes the state of the icon
-                        WeatherGetterOnce wgo = new WeatherGetterOnce(c);
-                        wgo.start();
+                        new WeatherGetterOnce(c).start();
                         binding.swiperefresh.setRefreshing(false);
                     }
                 }
@@ -198,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void prepareRightDrawer() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);//sets up the left drawer
         mDrawerLayoutCities = (DrawerLayout) findViewById(R.id.drawer_layoutcities);//sets up the right drawer
-        TextView add= findViewById(R.id.add_city);
+        TextView add = findViewById(R.id.add_city);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
