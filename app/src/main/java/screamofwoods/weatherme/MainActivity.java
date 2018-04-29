@@ -259,6 +259,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+        binding.citiesDrawerHolder.btnByLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(this,"Forecast by location",Toast.LENGTH_SHORT);
+                Log.d("Button clicked:","by location");
+            }
+        });
     }
 
     private void prepareLeftDrawer() {
