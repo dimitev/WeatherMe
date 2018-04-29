@@ -66,14 +66,14 @@ public class CityInfo extends BaseObservable implements Serializable {
 
     //In order to serialize the object properly
     @Override
-    public String toString(){
+    public String toString() {
         return "CityInfo[forecast=" + forecast.toString() + "lastUpdated=" + lastUpdated + ", weatherConditionHourly=" + weatherConditionHourly.toString() +
                 ", temperatureHourly=" + temperatureHourly.toString() + ", chanceOfRainHourly=" + chanceOfRainHourly.toString() +
                 ", name=" + name + ", region=" + region + ", country=" + country +
                 ", weatherCondition=" + weatherCondition + ", windDirection=" + windDirection +
-                ", cloudCoverage=" + cloudCoverage+ ", currentTemperature=" + currentTemperature +
+                ", cloudCoverage=" + cloudCoverage + ", currentTemperature=" + currentTemperature +
                 ", minimumTemperature=" + minimumTemperature + ", maximumTemperature=" + maximumTemperature +
-                ", windSpeed=" + windSpeed+ ", atmPressure=" + atmPressure +
+                ", windSpeed=" + windSpeed + ", atmPressure=" + atmPressure +
                 ", lat=" + lat + ", lon=" + lon + ", uvIndex=" + uvIndex +
                 ", humidity=" + humidity + ", chanceOfRain=" + chanceOfRain + ", isMetric=" + isMetric + ", isDay=" + isDay +
                 "]";
@@ -194,12 +194,14 @@ public class CityInfo extends BaseObservable implements Serializable {
         notifyPropertyChanged(BR._all);
     }
 
-    public boolean getIsDay() {
-        return isDay;
+    public void setIsDay(boolean day) {
+        isDay = day;
+        notifyPropertyChanged(BR._all);
     }
 
-    public void setDay(boolean day) {
-        isDay = day;
+    @Bindable
+    public boolean getIsDay() {
+        return isDay;
     }
 
     @Bindable
@@ -296,6 +298,5 @@ public class CityInfo extends BaseObservable implements Serializable {
     public String getCountry() {
         return this.country;
     }
-
 
 }

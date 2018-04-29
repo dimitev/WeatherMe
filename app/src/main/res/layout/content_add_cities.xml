@@ -4,25 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#222222"
+    android:orientation="horizontal"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".AddCitiesActivity"
-    android:orientation="horizontal"
-    tools:showIn="@layout/activity_add_cities"
-    android:background="#222222">
+    tools:showIn="@layout/activity_add_cities">
 
     <EditText
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
 
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="80dp"
         android:layout_marginVertical="8dp"
-        android:layout_marginLeft="8dp"
+        android:background="#AAAAAA"
         android:hint="Search city"
         android:text="Sofia"
-        android:background="#AAAAAA"
-        android:textSize="30dp"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        android:textSize="30dp" />
 
     <Button
         android:id="@+id/search_button"
@@ -30,7 +30,7 @@
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/textView"
-        android:text="Search"/>
+        android:text="Search" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/found_list"

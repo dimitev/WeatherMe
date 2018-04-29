@@ -68,9 +68,9 @@ public class Forecast implements Serializable{
                     city.setCloudCoverage(response.getJSONObject("current").getInt("cloud"));
                     int isDay = response.getJSONObject("current").getInt("is_day");
                     if(1 == isDay){
-                        city.setDay(true);
+                        city.setIsDay(true);
                     } else {
-                        city.setDay(false);
+                        city.setIsDay(false);
                     }
                     if(city.getIsMetric()){
                         city.setCurrentTemperature((float) response.getJSONObject("current").getDouble("temp_c"));

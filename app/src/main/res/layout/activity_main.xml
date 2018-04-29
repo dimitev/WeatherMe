@@ -8,108 +8,135 @@
             type="screamofwoods.weatherme.CityInfo" />
     </data>
 
-    <LinearLayout
-
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/holo_blue_light"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/my_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#00000000"
-            android:elevation="4dp"
-            android:fitsSystemWindows="true"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-            app:titleTextColor="@android:color/white" />
-
-        <android.support.v4.widget.DrawerLayout
-            android:id="@+id/drawer_layout"
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            tools:openDrawer="start">
+            android:scaleType="centerCrop"
+            android:src="@{state.isDay ? @drawable/day : @drawable/night}" />
+
+        <LinearLayout
+
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:elevation="4dp"
+                android:fitsSystemWindows="true"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+                app:titleTextColor="@android:color/white" />
 
             <android.support.v4.widget.DrawerLayout
-                android:id="@+id/drawer_layoutcities"
+                android:id="@+id/drawer_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="-57dp"
                 android:fitsSystemWindows="true"
-                tools:openDrawer="end">
+                tools:openDrawer="start">
 
-                <LinearLayout
-                    android:id="@+id/current"
+                <android.support.v4.widget.DrawerLayout
+                    android:id="@+id/drawer_layoutcities"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:fitsSystemWindows="true"
+                    tools:openDrawer="end">
 
-                    <include
-                        android:id="@+id/current_content"
-                        layout="@layout/current_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/hourly"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <include
-                        android:id="@+id/hourly_content"
-                        layout="@layout/hourly_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/five_day"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <include
-                        android:id="@+id/five_day_content"
-                        layout="@layout/five_day_content" />
-                </LinearLayout>
-
-                <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/swiperefresh"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ListView
-                        android:id="@android:id/list"
+                    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/swiperefresh"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="wrap_content">
 
-                </android.support.v4.widget.SwipeRefreshLayout>
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <LinearLayout
+                                    android:id="@+id/current"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <include
+                                        android:id="@+id/current_content"
+                                        layout="@layout/current_content" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/hourly"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <include
+                                        android:id="@+id/hourly_content"
+                                        layout="@layout/hourly_content" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/five_day"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <include
+                                        android:id="@+id/five_day_content"
+                                        layout="@layout/five_day_content" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </ScrollView>
+                    </android.support.v4.widget.SwipeRefreshLayout>
+
+                    <android.support.design.widget.NavigationView
+                        android:id="@+id/nav_viewcities"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:background="#222222"
+                        android:fitsSystemWindows="true">
+
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <include
+                                android:id="@+id/cities_drawer_holder"
+                                layout="@layout/cities_drawer_holder" />
+                        </ScrollView>
+                    </android.support.design.widget.NavigationView>
+                </android.support.v4.widget.DrawerLayout>
 
                 <android.support.design.widget.NavigationView
-                    android:id="@+id/nav_viewcities"
+                    android:id="@+id/nav_view"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="end"
+                    android:layout_gravity="start"
+                    android:background="#222222"
                     android:fitsSystemWindows="true">
 
-                    <include
-                        android:id="@+id/cities_drawer_holder"
-                        layout="@layout/cities_drawer_holder" />
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <include
+                            android:id="@+id/forecast_type_drawer_holder"
+                            layout="@layout/forecast_type_drawer_holder" />
+                    </ScrollView>
                 </android.support.design.widget.NavigationView>
+
+
             </android.support.v4.widget.DrawerLayout>
-
-            <android.support.design.widget.NavigationView
-                android:id="@+id/nav_view"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:fitsSystemWindows="true">
-
-                <include
-                    android:id="@+id/forecast_type_drawer_holder"
-                    layout="@layout/forecast_type_drawer_holder" />
-            </android.support.design.widget.NavigationView>
-
-
-        </android.support.v4.widget.DrawerLayout>
-    </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </layout>

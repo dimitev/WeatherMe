@@ -49,24 +49,28 @@ public class CityInfoSaveInstance extends Application {
         try
         {
             File f = new File(appContext.getFilesDir(), FILENAME);
-            FileInputStream fis = new FileInputStream(f);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            userCities = (ArrayList) ois.readObject();
-            if(userCities.isEmpty()) {
-                //get gps coordinates
-                //currentCity = new CityInfo(lat, lon);
-                //MainActivity.c = currentCity;
-                //instantiate current city to be the city with current coordinates
-            } else {
+            if(f.exists())
+            {
+                FileInputStream fis = new FileInputStream(f);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                userCities = (ArrayList) ois.readObject();
                 currentCity = userCities.get(userCities.size()-1);
+                userCities.remove(userCities.size()-1);
                 //currentCity.forecast = new Forecast(currentCity);
                 //userCities.remove(userCities.size()-1);
                 //Log.e("UserCities", userCities.toString());
                 MainActivity.UserCities = userCities;
                 MainActivity.c = currentCity;
+                ois.close();
+                fis.close();
+            } else {
+                MainActivity.c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
+                MainActivity.UserCities.add(MainActivity.c);
+                //get gps coordinates
+                //currentCity = new CityInfo(lat, lon);
+                //MainActivity.c = currentCity;
+                //instantiate current city to be the city with current coordinates
             }
-            ois.close();
-            fis.close();
         }catch(IOException ioe){
             Log.e("IOException read", ioe.getMessage());
         }catch(ClassNotFoundException cnfe){

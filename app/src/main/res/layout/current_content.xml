@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,13 +10,12 @@
             type="screamofwoods.weatherme.CityInfo" />
     </data>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
+
+        tools:context=".MainActivity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".MainActivity">
+        android:layout_height="wrap_content"
+        android:paddingTop="50dp">
 
 
         <TextView
@@ -111,5 +112,10 @@
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="16dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_below="@+id/txtCityUpdated"
+            android:layout_centerHorizontal="true"/>
     </RelativeLayout>
 </layout>

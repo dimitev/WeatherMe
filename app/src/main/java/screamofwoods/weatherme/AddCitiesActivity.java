@@ -64,7 +64,7 @@ public class AddCitiesActivity extends AppCompatActivity {
                 // Toast.makeText(getApplicationContext(), city.getName() + " is selected!", Toast.LENGTH_SHORT).show();
                 String name[]=city.getName().split(",");
                 city=new CityInfo(name[0],0,0,true);
-                new WeatherGetterOnce(city).start();
+                new WeatherGetterOnce(city, getApplicationContext()).start();
                 MainActivity.UserCities.add(city);
                 MainActivity.setCurrent(city);
                 SearchForCity.citiesFound.clear();

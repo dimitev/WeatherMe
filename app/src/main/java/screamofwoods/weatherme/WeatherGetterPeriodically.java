@@ -13,7 +13,7 @@ public class WeatherGetterPeriodically extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        Log.e("TestService", "Work to be called from here");
+        Log.e("JobService", "Executing Periodic job");
         updateForecastAsync = new UpdateForecastAsync();
         updateForecastAsync.execute(MainActivity.c);
         return false;

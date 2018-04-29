@@ -4,14 +4,17 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
+import android.widget.Toast;
 
 //Helper thread to execute the AsyncTask for updating just once
 //This is needed in order to make internet calls out of the main thread
 public class WeatherGetterOnce extends Thread {
     private Handler handler = new Handler();
     private CityInfo city;
+    private Context appContext;
 
-    public WeatherGetterOnce(CityInfo city){
+    public WeatherGetterOnce(CityInfo city, Context appContext){
+        this.appContext = appContext;
         this.city = city;
     }
 
@@ -20,15 +23,19 @@ public class WeatherGetterOnce extends Thread {
         //check for internet connection
         handler.post(new Runnable() {
             public void run() {
-                new UpdateForecastAsync().execute(city);
+                if(isOnline()) {
+                    new UpdateForecastAsync().execute(city);
+                } else {
+                    Toast.makeText(appContext, "You're offline!", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
 
-//    private boolean isNetworkAvailable() {
-//        ConnectivityManager connectivityManager
-//                = (ConnectivityManager) getSystemService(mContext);
-//        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-//        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-//    }
+    private boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) appContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
 }

@@ -3,9 +3,12 @@ package screamofwoods.weatherme;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -17,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.Menu;
@@ -30,10 +34,8 @@ import java.util.ArrayList;
 import screamofwoods.weatherme.databinding.ActivityMainBinding;
 
 //TODO check internet connectivity in the threads for updates
-//TODO remove current from list -> last element -> not working properly
 //TODO check if the file doesn't exist or the list is empty -> fileMotFoundException -> GPS coordinates
 //TODO GPS Coordinates via android gps services
-//TODO FIX jobScheduler NPE
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static ActivityMainBinding binding;//the binding between the classes and UI
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private WeatherGetterPeriodically weatherGetterPeriodically;//the background service for updating
     private CityInfoSaveInstance cityInfoSaveInstance;
     private CityInfo extraCity;//extra city for casual logic
+    private Context mainContext;
+
 
     //Constructor to run code once only @ the beginning of the App
     public MainActivity() {
@@ -76,15 +80,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             jobScheduler.cancel(1); //Cancel the current job that's responsible for updating
             jobScheduler.schedule(jobInfo); //Reschedule the job
         }
+        else{
+            Log.d("Set current","NPE");
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mainContext = this;
         cityInfoSaveInstance.readCitiesList();
 
         //backgroundUpdateForecast();
         //c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
+        //UserCities.add(c);
         //c.forecast.getMomentForecast();//gets some forecast
 
         prepareBinding();
@@ -94,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         prepareRecycler();//fills the cities drawer
         mAdapter.notifyDataSetChanged();//updates the drawer
         //cityInfoSaveInstance.saveCitiesList();
+        backgroundUpdateForecast();
     }
 
     @Override
@@ -128,16 +138,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 CityInfo city = UserCities.get(position);
                 // Toast.makeText(getApplicationContext(), city.getName() + " is selected!", Toast.LENGTH_SHORT).show();
                 c = city;
-                WeatherGetterOnce wgo = new WeatherGetterOnce(c);
-                wgo.start();
+                new WeatherGetterOnce(c, mainContext).start();
                 setCurrent(c);
             }
 
             @Override
             public void onLongClick(View view, int position) {
-
                 extraCity = UserCities.get(position);
-                //Toast.makeText(getApplicationContext(), extraCity.getName() + " settings!", Toast.LENGTH_SHORT).show();
                 registerForContextMenu(view);
                 openContextMenu(view);
                 unregisterForContextMenu(view);
@@ -179,14 +186,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding.setState(c);//sets the city to be shown in the activity_main
         binding.currentContent.setState(c);//sets the city to be shown in the content
         binding.swiperefresh.setOnRefreshListener(//swipe down to refresh listener
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        binding.swiperefresh.setRefreshing(true);//changes the state of the icon
-                        new WeatherGetterOnce(c).start();
-                        binding.swiperefresh.setRefreshing(false);
-                    }
+            new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    binding.swiperefresh.setRefreshing(true);//changes the state of the icon
+                    binding.swiperefresh.setRefreshing(false);
+                    new WeatherGetterOnce(c, mainContext).start();
                 }
+            }
         );
     }
 
