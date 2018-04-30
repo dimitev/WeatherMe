@@ -1,5 +1,6 @@
 package screamofwoods.weatherme;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,9 +24,9 @@ public class CityInfoSaveInstance extends Application {
     public static final String FILECURRENT = "Current.bin";
     private ArrayList<CityInfo> userCities;
     private CityInfo currentCity;
-    private Context appContext;
+    private Activity appContext;
 
-    public CityInfoSaveInstance (Context appContext){
+    public CityInfoSaveInstance (Activity appContext){
         this.appContext = appContext;
     }
 
@@ -77,9 +78,12 @@ public class CityInfoSaveInstance extends Application {
                 }
                 MainActivity.c = currentCity;
             } else {
+                Log.e("No files found", "GPS SEARCH");
                 MainActivity.UserCities.clear();
-                MainActivity.c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
-                MainActivity.UserCities.add(MainActivity.c);
+                GeoLocation geo = new GeoLocation(appContext);
+                geo.getLocation();
+//                MainActivity.c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
+//                MainActivity.UserCities.add(MainActivity.c);
                 //get gps coordinates
                 //currentCity = new CityInfo(lat, lon);
                 //MainActivity.c = currentCity;

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -37,7 +38,9 @@ public class GeoLocation {
                 public void onSuccess(Location location) {
                     //TODO provide dialogue to ask the user for metric or not!
                     if(location != null){
-                        MainActivity.c = new CityInfo((float) location.getLatitude(), (float) location.getLongitude(), true);
+                        CityInfo cur = new CityInfo((float) location.getLatitude(), (float) location.getLongitude(), true);
+                        MainActivity.setCurrent(cur);
+                        new WeatherGetterOnce(cur, appContext);
                     }
                 }
             });

@@ -33,9 +33,8 @@ import java.util.ArrayList;
 
 import screamofwoods.weatherme.databinding.ActivityMainBinding;
 
-//TODO check internet connectivity in the threads for updates
-//TODO check if the file doesn't exist or the list is empty -> fileMotFoundException -> GPS coordinates
-//TODO GPS Coordinates via android gps services
+//TODO fix setting the city by gps coordinates!!!
+//TODO HINT -> setCurrent and WeatherGetterOnce and WeatherGetterPeriodically are messed up when called with the gps
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static ActivityMainBinding binding;//the binding between the classes and UI
@@ -69,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static void setCurrent(CityInfo in) {
+        Log.e("SetCur called", in.getName());
         c = in;
         binding.setState(c);//sets the city to be shown in the activity_main
         binding.currentContent.setState(c);
