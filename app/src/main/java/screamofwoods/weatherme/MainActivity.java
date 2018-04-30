@@ -49,11 +49,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView mRecyclerView;//for the list of cities
     public static RecyclerView.Adapter mAdapter;//for the list of cities
     private RecyclerView.LayoutManager mLayoutManager;//for the list of cities
-    private WeatherGetterPeriodically weatherGetterPeriodically;//the background service for updating
+    //private WeatherGetterPeriodically weatherGetterPeriodically;//the background service for updating
     private CityInfoSaveInstance cityInfoSaveInstance;
     private CityInfo extraCity;//extra city for casual logic
     private Context mainContext;
-
 
     //Constructor to run code once only @ the beginning of the App
     public MainActivity() {
@@ -107,9 +106,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
         cityInfoSaveInstance.saveCitiesList();
+        super.onStop();
     }
 
     private void backgroundUpdateForecast() {
@@ -259,11 +258,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+        //THIS SHIT IS GPS
         binding.citiesDrawerHolder.btnByLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(this,"Forecast by location",Toast.LENGTH_SHORT);
                 Log.d("Button clicked:","by location");
+                GeoLocation geoLocation = new GeoLocation(MainActivity.this);
+                geoLocation.getLocation();
+                Toast.makeText(MainActivity.this, "Coordinates - LAT: " + c.getLat(), Toast.LENGTH_LONG).show();
             }
         });
     }

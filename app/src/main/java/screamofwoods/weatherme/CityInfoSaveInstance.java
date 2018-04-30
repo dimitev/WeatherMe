@@ -19,7 +19,8 @@ import java.util.Set;
 //TODO REWORK USING SERIALIZED FILES
 
 public class CityInfoSaveInstance extends Application {
-    public static final String FILENAME = "UserCities.bin";
+    public static final String FILELIST = "UserCities.bin";
+    public static final String FILECURRENT = "Current.bin";
     private ArrayList<CityInfo> userCities;
     private CityInfo currentCity;
     private Context appContext;
@@ -31,13 +32,19 @@ public class CityInfoSaveInstance extends Application {
     public void saveCitiesList(){
         userCities = MainActivity.UserCities;
         currentCity = MainActivity.c;
-        userCities.add(currentCity); //Add current city at the end of the list. When reading remove it!!!
         try{
-            File f = new File(appContext.getFilesDir(), FILENAME);
-            FileOutputStream fos = new FileOutputStream(f);
+            File fl = new File(appContext.getFilesDir(), FILELIST);
+            File fc = new File(appContext.getFilesDir(), FILECURRENT);
+            FileOutputStream fos = new FileOutputStream(fl);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(userCities);
-            Log.e("Success in write", "Success");
+            Log.e("Success in write", "Success writing list");
+            oos.close();
+            fos.close();
+            fos = new FileOutputStream(fc);
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(currentCity);
+            Log.e("Success in write", "Success writing current");
             oos.close();
             fos.close();
         } catch(IOException ioe) {
@@ -48,22 +55,29 @@ public class CityInfoSaveInstance extends Application {
     public void readCitiesList(){
         try
         {
-            File f = new File(appContext.getFilesDir(), FILENAME);
-            if(f.exists())
+            File fl = new File(appContext.getFilesDir(), FILELIST);
+            File fc = new File(appContext.getFilesDir(), FILECURRENT);
+            if(fl.exists())
             {
-                FileInputStream fis = new FileInputStream(f);
+                FileInputStream fis = new FileInputStream(fl);
                 ObjectInputStream ois = new ObjectInputStream(fis);
-                userCities = (ArrayList) ois.readObject();
-                currentCity = userCities.get(userCities.size()-1);
-                userCities.remove(userCities.size()-1);
-                //currentCity.forecast = new Forecast(currentCity);
-                //userCities.remove(userCities.size()-1);
-                //Log.e("UserCities", userCities.toString());
+                MainActivity.UserCities.clear();
+                userCities = (ArrayList<CityInfo>) ois.readObject();
                 MainActivity.UserCities = userCities;
-                MainActivity.c = currentCity;
                 ois.close();
                 fis.close();
+                if(fc.exists()){
+                    fis = new FileInputStream(fc);
+                    ois = new ObjectInputStream(fis);
+                    currentCity = (CityInfo) ois.readObject();
+                    ois.close();
+                    fis.close();
+                } else {
+                    currentCity = userCities.get(0);
+                }
+                MainActivity.c = currentCity;
             } else {
+                MainActivity.UserCities.clear();
                 MainActivity.c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
                 MainActivity.UserCities.add(MainActivity.c);
                 //get gps coordinates
@@ -72,7 +86,8 @@ public class CityInfoSaveInstance extends Application {
                 //instantiate current city to be the city with current coordinates
             }
         }catch(IOException ioe){
-            Log.e("IOException read", ioe.getMessage());
+            Log.e("IOException read", "Shit is bad man");
+            ioe.printStackTrace();
         }catch(ClassNotFoundException cnfe){
             Log.e("Class not found", cnfe.getMessage());
         }
