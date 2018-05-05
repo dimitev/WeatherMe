@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static void setCurrent(CityInfo in) {
-        Log.e("SetCur called", in.getName());
+//        Log.e("SetCur called", in.getName());
         c = in;
         binding.setState(c);//sets the city to be shown in the activity_main
         binding.currentContent.setState(c);
@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //Toast.makeText(this,"Forecast by location",Toast.LENGTH_SHORT);
                 Log.d("Button clicked:","by location");
                 GeoLocation geoLocation = new GeoLocation(MainActivity.this);
-                geoLocation.getLocation();
+                geoLocation.execute();
                 Toast.makeText(MainActivity.this, "Coordinates - LAT: " + c.getLat(), Toast.LENGTH_LONG).show();
             }
         });

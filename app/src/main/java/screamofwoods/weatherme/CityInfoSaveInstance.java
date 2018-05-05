@@ -16,6 +16,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 //TODO REWORK USING SERIALIZED FILES
 
@@ -78,10 +79,10 @@ public class CityInfoSaveInstance extends Application {
                 }
                 MainActivity.c = currentCity;
             } else {
-                Log.e("No files found", "GPS SEARCH");
+                Log.e("No files found", "Redirect to search activity");
                 MainActivity.UserCities.clear();
-                GeoLocation geo = new GeoLocation(appContext);
-                geo.getLocation();
+
+                //Log.e("Current city", ""+MainActivity.c.getLat());
 //                MainActivity.c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
 //                MainActivity.UserCities.add(MainActivity.c);
                 //get gps coordinates
