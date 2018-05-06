@@ -50,15 +50,19 @@ public class CityInfoSaveInstance extends Application {
                 oos.close();
                 fos.close();
             }
-            if(currentCity.getName().equals("No City") || currentCity == null){
+            if(currentCity == null){
                 fc.delete();
             } else{
-                fos = new FileOutputStream(fc);
-                oos = new ObjectOutputStream(fos);
-                oos.writeObject(currentCity);
-                Log.e("Success in write", "Success writing current");
-                oos.close();
-                fos.close();
+                if(currentCity.getName().equals("No city")){
+                    fc.delete();
+                } else {
+                    fos = new FileOutputStream(fc);
+                    oos = new ObjectOutputStream(fos);
+                    oos.writeObject(currentCity);
+                    Log.e("Success in write", "Success writing current");
+                    oos.close();
+                    fos.close();
+                }
             }
         } catch(IOException ioe) {
             Log.e("IOException write", ioe.toString());

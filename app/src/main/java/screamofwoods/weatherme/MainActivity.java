@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -51,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //private WeatherGetterPeriodically weatherGetterPeriodically;//the background service for updating
     private CityInfoSaveInstance cityInfoSaveInstance;
     private CityInfo extraCity;//extra city for casual logic
-    private Context mainContext;
+    private static Context mainContext;
 
     //Constructor to run code once only @ the beginning of the App
     public MainActivity() {
@@ -80,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             jobScheduler.schedule(jobInfo); //Reschedule the job
         }
         else{
+            backgroundUpdateForecast();
             Log.d("Set current","NPE");
         }
     }
@@ -87,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainActivity.mainContext = getAppContext();
         mainContext = this;
 
         //read cities returns boolean -> if current city is null->true else false
@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         prepareRecycler();//fills the cities drawer
         mAdapter.notifyDataSetChanged();//updates the drawer
         //cityInfoSaveInstance.saveCitiesList();
-        backgroundUpdateForecast();
     }
 
     @Override
@@ -116,9 +115,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStop();
     }
 
-    private void backgroundUpdateForecast() {
-        jobScheduler = (JobScheduler) getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE);
-        ComponentName componentName = new ComponentName(getApplicationContext(), WeatherGetterPeriodically.class);
+    public static Context getAppContext() {
+        return MainActivity.mainContext;
+    }
+
+    private static void backgroundUpdateForecast() {
+        jobScheduler = (JobScheduler) getAppContext().getSystemService(JOB_SCHEDULER_SERVICE);
+        ComponentName componentName = new ComponentName(getAppContext(), WeatherGetterPeriodically.class);
         jobInfo = new JobInfo.Builder(1, componentName)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setPeriodic(1000 * 60 * 15) //Every 15 mins
@@ -167,7 +170,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //Toast.makeText(getApplicationContext(),extraCity.getName()+" removed", Toast.LENGTH_SHORT).show();
                 if (UserCities.size() == 0) {
                     Toast.makeText(getApplicationContext(), "No remaining cities", Toast.LENGTH_LONG).show();
-                    jobScheduler.cancel(1);
+                    if(jobScheduler != null){
+                        jobScheduler.cancel(1);
+                    }
                     c.setName("No city");
                     c.setCountry("showing last info");
                 } else {
@@ -194,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onRefresh() {
                     binding.swiperefresh.setRefreshing(true);//changes the state of the icon
                     binding.swiperefresh.setRefreshing(false);
-                    if(c != null && !(c.getName().equals("No City"))){
+                    if(c != null && !(c.getName().equals("No city"))){
                         new WeatherGetterOnce(c, mainContext).start();
                     } else {
                         Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
