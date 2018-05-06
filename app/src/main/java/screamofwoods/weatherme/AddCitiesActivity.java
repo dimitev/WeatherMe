@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,13 +23,14 @@ public class AddCitiesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_cities);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//shows the toolbar arrow and hamburger menu
         getSupportActionBar().setHomeButtonEnabled(true);//shows the toolbar arrow and hamburger menu
         SearchForCity.citiesFound.clear();
-        SearchForCity.citiesFound.add(new CityInfo("Varna", 0, 0, true));
+        //SearchForCity.citiesFound.add(new CityInfo("Varna", 0, 0, true));
         prepareRecycler();
         Button search = findViewById(R.id.search_button);
         search.setOnClickListener(new View.OnClickListener() {
@@ -42,9 +44,9 @@ public class AddCitiesActivity extends AppCompatActivity {
                 mAdapter.notifyDataSetChanged();//updates the drawer
             }
         });
-        //CityInfo d =new CityInfo("Varna",0,0,true);
-        //new WeatherGetterOnce(d).start();
-        //UserCities.add(d);
+//        CityInfo d =new CityInfo("Varna",0,0,true);
+//        new WeatherGetterOnce(d).start();
+//        UserCities.add(d);
     }
 
     private void prepareRecycler() {
@@ -52,7 +54,7 @@ public class AddCitiesActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
+        Log.e("AddCitiesActivity", "Prepare Recycler Success coming here");
         // specify an adapter
         mAdapter = new MyAdapter(SearchForCity.citiesFound);
         mRecyclerView.setAdapter(mAdapter);

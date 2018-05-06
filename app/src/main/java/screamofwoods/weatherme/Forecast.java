@@ -56,6 +56,8 @@ public class Forecast implements Serializable{
                     if(city.getName().isEmpty()){
                         city.setName(response.getJSONObject("location").getString("name"));
                     }
+                    city.setLon((float) response.getJSONObject("location").getDouble("lat"));
+                    city.setLat((float) response.getJSONObject("location").getDouble("lon"));
                     city.setRegion(response.getJSONObject("location").getString("region"));
                     city.setCountry(response.getJSONObject("location").getString("country"));
                     city.setLastUpdated(response.getJSONObject("current").getString("last_updated"));

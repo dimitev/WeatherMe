@@ -88,7 +88,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainContext = this;
-        cityInfoSaveInstance.readCitiesList();
+
+        //read cities returns boolean -> if current city is null->true else false
+        if(cityInfoSaveInstance.readCitiesList()){
+           Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
+           startActivity(intent);
+        }
 
         //backgroundUpdateForecast();
         //c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
@@ -170,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     setCurrent(c);
                 }
                 mAdapter.notifyDataSetChanged();
-
                 return true;
             }
             case R.id.cancel:
@@ -190,7 +194,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onRefresh() {
                     binding.swiperefresh.setRefreshing(true);//changes the state of the icon
                     binding.swiperefresh.setRefreshing(false);
-                    new WeatherGetterOnce(c, mainContext).start();
+                    if(c != null && !(c.getName().equals("No City"))){
+                        new WeatherGetterOnce(c, mainContext).start();
+                    } else {
+                        Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
+                        startActivity(intent);
+                    }
                 }
             }
         );
@@ -264,9 +273,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 //Toast.makeText(this,"Forecast by location",Toast.LENGTH_SHORT);
                 Log.d("Button clicked:","by location");
-                GeoLocation geoLocation = new GeoLocation(MainActivity.this);
-                geoLocation.execute();
-                Toast.makeText(MainActivity.this, "Coordinates - LAT: " + c.getLat(), Toast.LENGTH_LONG).show();
             }
         });
     }
