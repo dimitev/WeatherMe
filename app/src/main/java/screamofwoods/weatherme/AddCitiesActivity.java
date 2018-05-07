@@ -1,6 +1,5 @@
 package screamofwoods.weatherme;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import static screamofwoods.weatherme.MainActivity.binding;
 import static screamofwoods.weatherme.MainActivity.c;
 
 public class AddCitiesActivity extends AppCompatActivity {
@@ -62,13 +60,13 @@ public class AddCitiesActivity extends AppCompatActivity {
             //Change selected city from right hand side list
             @Override
             public void onClick(View view, int position) {
-                CityInfo city = SearchForCity.citiesFound.get(position);
+                MainActivity.c = SearchForCity.citiesFound.get(position);
                 // Toast.makeText(getApplicationContext(), city.getName() + " is selected!", Toast.LENGTH_SHORT).show();
-                String name[]=city.getName().split(",");
-                city=new CityInfo(name[0],0,0,true);
-                new WeatherGetterOnce(city, getApplicationContext()).start();
-                MainActivity.UserCities.add(city);
-                MainActivity.setCurrent(city);
+                String name[] = c.getName().split(",");
+                c = new CityInfo(name[0], 0, 0, true);
+                new WeatherGetterOnce(c, getApplicationContext()).start();
+                MainActivity.UserCities.add(c);
+                MainActivity.setCurrent(c);
                 SearchForCity.citiesFound.clear();
                 MainActivity.mAdapter.notifyDataSetChanged();
                 //Intent intent = new Intent(AddCitiesActivity.this, MainActivity.class);

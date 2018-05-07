@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout  xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -12,17 +11,24 @@
 
     <RelativeLayout
 
-        tools:context=".MainActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="50dp">
+        android:paddingTop="50dp"
+        tools:context=".MainActivity">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@{state.weatherConditionImage}" />
 
         <TextView
             android:id="@+id/txtCityName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:shadowColor="#000000"
+            android:shadowRadius="8"
             android:text="@{state.name}"
             android:textAlignment="center"
             android:textColor="@android:color/white"
@@ -34,6 +40,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtCityName"
             android:layout_centerHorizontal="true"
+            android:shadowColor="#000000"
+            android:shadowRadius="8"
             android:text="@{state.country}"
             android:textAlignment="center"
             android:textColor="@android:color/white"
@@ -45,6 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtCountry"
             android:layout_centerHorizontal="true"
+            android:shadowColor="#000000"
+            android:shadowRadius="8"
             android:text="@{state.weatherCondition}"
             android:textAlignment="center"
             android:textColor="@android:color/white"
@@ -56,6 +66,8 @@
             android:layout_height="20dp"
             android:layout_below="@+id/txtCityNameView"
             android:layout_centerHorizontal="true"
+            android:shadowColor="#000000"
+            android:shadowRadius="8"
             android:text="current temp:"
             android:textAlignment="center"
             android:textColor="@android:color/white" />
@@ -66,6 +78,8 @@
             android:layout_height="50dp"
             android:layout_below="@+id/txtCityTempView"
             android:layout_centerHorizontal="true"
+            android:shadowColor="#000000"
+            android:shadowRadius="8"
             android:text="@{String.valueOf(state.currentTemperature)}"
             android:textAlignment="center"
             android:textColor="@android:color/white"
@@ -77,6 +91,8 @@
             android:layout_height="20dp"
             android:layout_below="@+id/txtCityTemp"
             android:layout_centerHorizontal="true"
+            android:shadowColor="#000000"
+            android:shadowRadius="8"
             android:text="current windspeed:"
             android:textAlignment="center"
             android:textColor="@android:color/white" />
@@ -87,6 +103,8 @@
             android:layout_height="50dp"
             android:layout_below="@+id/txtCityWindView"
             android:layout_centerHorizontal="true"
+            android:shadowColor="#000000"
+            android:shadowRadius="8"
             android:text="@{String.valueOf(state.windSpeed)}"
             android:textAlignment="center"
             android:textColor="@android:color/white"
@@ -98,6 +116,8 @@
             android:layout_height="20dp"
             android:layout_below="@+id/txtCityWind"
             android:layout_centerHorizontal="true"
+            android:shadowColor="#000000"
+            android:shadowRadius="8"
             android:text="updated:"
             android:textAlignment="center"
             android:textColor="@android:color/white" />
@@ -108,14 +128,17 @@
             android:layout_height="50dp"
             android:layout_below="@+id/txtCityUpdatedView"
             android:layout_centerHorizontal="true"
+            android:shadowColor="#000000"
+            android:shadowRadius="8"
             android:text="@{state.lastUpdated}"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="16dp" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_below="@+id/txtCityUpdated"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </layout>

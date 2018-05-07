@@ -88,24 +88,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         MainActivity.mainContext = getAppContext();
         mainContext = this;
+        //c=new CityInfo();
 
         //read cities returns boolean -> if current city is null->true else false
-        if(cityInfoSaveInstance.readCitiesList()){
-           Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
-           startActivity(intent);
-        }
+
 
         //backgroundUpdateForecast();
         //c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
         //UserCities.add(c);
         //c.forecast.getMomentForecast();//gets some forecast
-
+        if(cityInfoSaveInstance.readCitiesList()){
+            Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
+            startActivity(intent);
+        }
         prepareBinding();
         prepareToolbar();
         prepareRightDrawer();
         prepareLeftDrawer();
         prepareRecycler();//fills the cities drawer
         mAdapter.notifyDataSetChanged();//updates the drawer
+
         //cityInfoSaveInstance.saveCitiesList();
     }
 
@@ -270,14 +272,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDrawerStateChanged(int newState) {
 
-            }
-        });
-        //THIS SHIT IS GPS
-        binding.citiesDrawerHolder.btnByLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(this,"Forecast by location",Toast.LENGTH_SHORT);
-                Log.d("Button clicked:","by location");
             }
         });
     }

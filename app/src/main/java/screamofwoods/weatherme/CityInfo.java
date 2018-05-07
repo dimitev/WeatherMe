@@ -2,6 +2,8 @@ package screamofwoods.weatherme;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import java.io.Serializable;
 
@@ -237,6 +239,46 @@ public class CityInfo extends BaseObservable implements Serializable {
     @Bindable
     public String getWeatherCondition() {
         return weatherCondition;
+    }
+
+    public void setWeatherConditionImage(String v) {
+    }
+
+    @Bindable
+    public Drawable getWeatherConditionImage() {
+        //return MainActivity.getAppContext().getResources().getDrawable(R.drawable.cloud);
+        String w = getWeatherCondition();
+        if (w == null) return null;
+        //return "" + R.drawable.fog;/*
+        Log.d("GetImage", w);
+        switch (w) {
+            //cloud
+            case "Cloudy":
+            case "Overcast":
+                return MainActivity.getAppContext().getResources().getDrawable(R.drawable.cloud);
+            case "Partly cloudy":
+                return MainActivity.getAppContext().getResources().getDrawable(R.drawable.cloudpart);
+            //fog
+            case "Mist":
+            case "Fog":
+            case "Freezing fog":
+                return MainActivity.getAppContext().getResources().getDrawable(R.drawable.fog);
+            //rain
+            default: {
+                //storm
+                if (w.contains("storm") || w.contains("thunder"))
+                    return MainActivity.getAppContext().getResources().getDrawable(R.drawable.storm);
+                else if (w.contains("rain") || w.contains("pellets") || w.contains("sleet"))
+                    return MainActivity.getAppContext().getResources().getDrawable(R.drawable.rain);
+                    //snow
+                else if (w.contains("snow"))
+                    return MainActivity.getAppContext().getResources().getDrawable(R.drawable.snow);
+
+                else//clear
+                    return null;
+            }
+        }
+
     }
 
     @Bindable
