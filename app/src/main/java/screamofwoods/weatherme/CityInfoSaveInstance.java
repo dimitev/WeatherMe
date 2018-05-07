@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 
 //TODO REWORK USING SERIALIZED FILES
 
-public class CityInfoSaveInstance extends Application {
+public class CityInfoSaveInstance{
     public static final String FILELIST = "UserCities.bin";
     public static final String FILECURRENT = "Current.bin";
     private ArrayList<CityInfo> userCities;
