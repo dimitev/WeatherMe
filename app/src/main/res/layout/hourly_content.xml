@@ -27,5 +27,14 @@
             android:textColor="@android:color/white"
             android:textSize="40dp" />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/hourly_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:scrollbars="vertical" />
+
     </RelativeLayout>
 </layout>

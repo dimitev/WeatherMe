@@ -35,6 +35,7 @@ public class CityInfo extends BaseObservable implements Serializable {
     private int chanceOfRain;
     private boolean isMetric;
     private boolean isDay;
+    public Hourly[] hourly = new Hourly[24];
 
     public CityInfo() {
 
@@ -47,10 +48,13 @@ public class CityInfo extends BaseObservable implements Serializable {
         weatherConditionHourly = new String[24];
         temperatureHourly = new float[24];
         chanceOfRainHourly = new int[24];
+        hourly = new Hourly[24];
         this.isMetric = isMetric;
         forecast = new Forecast();
         //forecast.getHourlyForecast();
         notifyPropertyChanged(BR._all);
+        for (int i = 0; i < 24; i++)
+            hourly[i] = new Hourly(1, 5, "good", 5);
     }
 
     public CityInfo(float lat, float lon, boolean isMetric) {
@@ -59,6 +63,7 @@ public class CityInfo extends BaseObservable implements Serializable {
         weatherConditionHourly = new String[24];
         temperatureHourly = new float[24];
         chanceOfRainHourly = new int[24];
+        hourly = new Hourly[24];
         this.isMetric = isMetric;
         forecast = new Forecast();
         //forecast.getHourlyForecast();
@@ -263,10 +268,10 @@ public class CityInfo extends BaseObservable implements Serializable {
                 return MainActivity.getAppContext().getResources().getDrawable(R.drawable.fog);
             case "Sunny":
 
-            return MainActivity.getAppContext().getResources().getDrawable(R.drawable.sunny);
+                return MainActivity.getAppContext().getResources().getDrawable(R.drawable.sunny);
             case "Clear":
 
-            return MainActivity.getAppContext().getResources().getDrawable(R.drawable.clear);
+                return MainActivity.getAppContext().getResources().getDrawable(R.drawable.clear);
             //rain
             default: {
                 //storm
@@ -343,5 +348,4 @@ public class CityInfo extends BaseObservable implements Serializable {
     public String getCountry() {
         return this.country;
     }
-
 }

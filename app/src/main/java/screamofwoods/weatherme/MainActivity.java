@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView mRecyclerView;//for the list of cities
     public static RecyclerView.Adapter mAdapter;//for the list of cities
     private RecyclerView.LayoutManager mLayoutManager;//for the list of cities
+    private RecyclerView mRecyclerViewHourly;//for the list of hourly forecast
+    public static RecyclerView.Adapter mAdapterHourly;//for the list of hourly forecast
+    private RecyclerView.LayoutManager mLayoutManagerHourly;//for the list of hourly forecast
     //private WeatherGetterPeriodically weatherGetterPeriodically;//the background service for updating
     private CityInfoSaveInstance cityInfoSaveInstance;
     private CityInfo extraCity;//extra city for casual logic
@@ -76,10 +79,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (jobScheduler != null) {//TODO fix NPE here
             jobScheduler.cancel(1); //Cancel the current job that's responsible for updating
             jobScheduler.schedule(jobInfo); //Reschedule the job
-        }
-        else{
+        } else {
             backgroundUpdateForecast();
-            Log.d("Set current","NPE");
+            Log.d("Set current", "NPE");
         }
     }
 
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
         //UserCities.add(c);
         //c.forecast.getMomentForecast();//gets some forecast
-        if(cityInfoSaveInstance.readCitiesList()){
+        if (cityInfoSaveInstance.readCitiesList()) {
             Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
             startActivity(intent);
         }
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         prepareRightDrawer();
         prepareLeftDrawer();
         prepareRecycler();//fills the cities drawer
+        prepareRecyclerHourly();//fills the hourly forecast
         mAdapter.notifyDataSetChanged();//updates the drawer
 
         //cityInfoSaveInstance.saveCitiesList();
@@ -161,6 +164,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }));
     }
 
+    private void prepareRecyclerHourly() {
+        mRecyclerViewHourly = findViewById(R.id.hourly_list);
+        mRecyclerViewHourly.setHasFixedSize(true);
+        mLayoutManagerHourly = new LinearLayoutManager(this);
+        mRecyclerViewHourly.setLayoutManager(mLayoutManagerHourly);
+        // specify an adapter
+        mAdapterHourly = new MyAdapterHourly(MainActivity.c.hourly);
+        mRecyclerViewHourly.setAdapter(mAdapterHourly);
+    }
+
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         getMenuInflater().inflate(R.menu.city_options, menu);
     }
@@ -172,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //Toast.makeText(getApplicationContext(),extraCity.getName()+" removed", Toast.LENGTH_SHORT).show();
                 if (UserCities.size() == 0) {
                     Toast.makeText(getApplicationContext(), "No remaining cities", Toast.LENGTH_LONG).show();
-                    if(jobScheduler != null){
+                    if (jobScheduler != null) {
                         jobScheduler.cancel(1);
                     }
                     c.setName("No city");
@@ -196,19 +209,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding.setState(c);//sets the city to be shown in the activity_main
         binding.currentContent.setState(c);//sets the city to be shown in the content
         binding.swiperefresh.setOnRefreshListener(//swipe down to refresh listener
-            new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    binding.swiperefresh.setRefreshing(true);//changes the state of the icon
-                    binding.swiperefresh.setRefreshing(false);
-                    if(c != null && !(c.getName().equals("No city"))){
-                        new WeatherGetterOnce(c, mainContext).start();
-                    } else {
-                        Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
-                        startActivity(intent);
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        binding.swiperefresh.setRefreshing(true);//changes the state of the icon
+                        binding.swiperefresh.setRefreshing(false);
+                        if (c != null && !(c.getName().equals("No city"))) {
+                            new WeatherGetterOnce(c, mainContext).start();
+                        } else {
+                            Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
+                            startActivity(intent);
+                        }
                     }
                 }
-            }
         );
     }
 
