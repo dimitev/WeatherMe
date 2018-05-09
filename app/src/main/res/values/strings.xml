@@ -8,4 +8,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_add_cities">AddCitiesActivity</string>
+    <string name="Celsius">°C</string>
+    <string name="Farenheit">°F</string>
 </resources>

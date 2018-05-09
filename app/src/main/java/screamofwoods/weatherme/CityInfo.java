@@ -3,7 +3,6 @@ package screamofwoods.weatherme;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import java.io.Serializable;
 
@@ -232,7 +231,7 @@ public class CityInfo extends BaseObservable implements Serializable {
     }
 
     @Bindable
-    public Boolean getIsMetric() {
+    public boolean getIsMetric() {
         return isMetric;
     }
 
@@ -246,11 +245,10 @@ public class CityInfo extends BaseObservable implements Serializable {
 
     @Bindable
     public Drawable getWeatherConditionImage() {
-        //return MainActivity.getAppContext().getResources().getDrawable(R.drawable.cloud);
         String w = getWeatherCondition();
         if (w == null) return null;
         //return "" + R.drawable.fog;/*
-        Log.d("GetImage", w);
+        //Log.d("GetImage", w);
         switch (w) {
             //cloud
             case "Cloudy":
@@ -263,6 +261,12 @@ public class CityInfo extends BaseObservable implements Serializable {
             case "Fog":
             case "Freezing fog":
                 return MainActivity.getAppContext().getResources().getDrawable(R.drawable.fog);
+            case "Sunny":
+
+            return MainActivity.getAppContext().getResources().getDrawable(R.drawable.sunny);
+            case "Clear":
+
+            return MainActivity.getAppContext().getResources().getDrawable(R.drawable.clear);
             //rain
             default: {
                 //storm
@@ -273,12 +277,11 @@ public class CityInfo extends BaseObservable implements Serializable {
                     //snow
                 else if (w.contains("snow"))
                     return MainActivity.getAppContext().getResources().getDrawable(R.drawable.snow);
-
-                else//clear
-                    return null;
             }
         }
 
+        //clear
+        return null;
     }
 
     @Bindable

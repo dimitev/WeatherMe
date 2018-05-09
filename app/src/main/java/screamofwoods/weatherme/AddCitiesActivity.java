@@ -9,8 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import static screamofwoods.weatherme.MainActivity.c;
+import static screamofwoods.weatherme.MainActivity.getAppContext;
 
 public class AddCitiesActivity extends AppCompatActivity {
 
@@ -48,7 +49,7 @@ public class AddCitiesActivity extends AppCompatActivity {
     }
 
     private void prepareRecycler() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.found_list);
+        mRecyclerView = findViewById(R.id.found_list);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -60,28 +61,26 @@ public class AddCitiesActivity extends AppCompatActivity {
             //Change selected city from right hand side list
             @Override
             public void onClick(View view, int position) {
-                MainActivity.c = SearchForCity.citiesFound.get(position);
-                // Toast.makeText(getApplicationContext(), city.getName() + " is selected!", Toast.LENGTH_SHORT).show();
-                String name[] = c.getName().split(",");
-                c = new CityInfo(name[0], 0, 0, true);
-                new WeatherGetterOnce(c, getApplicationContext()).start();
-                MainActivity.UserCities.add(c);
-                MainActivity.setCurrent(c);
+                CityInfo nc = SearchForCity.citiesFound.get(position);
+                for (CityInfo s : MainActivity.UserCities) {
+                    if (s.getName().equals((nc.getName().split(",")[0])) && s.getCountry().equals(nc.getCountry())) {
+                        Toast.makeText(getAppContext(), "City already added", Toast.LENGTH_SHORT).show();
+                        //Log.e("Add a city","gets in the for");
+                        return;
+                    }
+                    //Log.e("coutries","'"+nc.getCountry()+"'  '"+s.getCountry()+"'");
+                }
+                nc = new CityInfo(nc.getName().split(",")[0], 0, 0, true);
+                new WeatherGetterOnce(nc, getApplicationContext()).start();
+                MainActivity.UserCities.add(nc);
+                MainActivity.setCurrent(nc);
                 SearchForCity.citiesFound.clear();
                 MainActivity.mAdapter.notifyDataSetChanged();
-                //Intent intent = new Intent(AddCitiesActivity.this, MainActivity.class);
-                //startActivity(intent);
                 finish();
             }
 
             @Override
             public void onLongClick(View view, int position) {
-
-               /* extraCity = UserCities.get(position);
-                //Toast.makeText(getApplicationContext(), extraCity.getName() + " settings!", Toast.LENGTH_SHORT).show();
-                registerForContextMenu(view);
-                openContextMenu(view);
-                unregisterForContextMenu(view);*/
             }
         }));
     }
