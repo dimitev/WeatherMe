@@ -27,6 +27,18 @@ public class Forecast implements Serializable{
         return "Forecast[BASE_URL=" + BASE_URL + ", API_KEY=" + API_KEY + "]";
     }
 
+    private int getCurrentHour(){
+        DateTime date = new DateTime();
+        int currentHour = date.getHourOfDay();
+        if(date.getMinuteOfHour() >= 30){
+            if(currentHour == 23) {
+                currentHour = 0;
+            }else {
+                currentHour++;
+            }
+        }
+        return currentHour;
+    }
     //Update the current weather for a city
     public void getMomentForecast(final CityInfo city)
     {
@@ -38,16 +50,8 @@ public class Forecast implements Serializable{
         } else {
             requestParams.add("q", Float.toString(city.getLat()) + "," + Float.toString(city.getLon()));
         }
-        DateTime date = new DateTime();
-        int currentHour = date.getHourOfDay();
-        if(date.getMinuteOfHour() >= 30){
-            if(currentHour == 23) {
-                currentHour = 0;
-            }else {
-                currentHour++;
-            }
-        }
-        requestParams.add("hour", Integer.toString(currentHour));
+
+        requestParams.add("hour", Integer.toString(getCurrentHour()));
         syncHttpClient.get(BASE_URL, requestParams, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response){
@@ -63,6 +67,7 @@ public class Forecast implements Serializable{
                     city.setLastUpdated(response.getJSONObject("current").getString("last_updated"));
                     city.setAtmPressure((float) response.getJSONObject("current").getDouble("pressure_mb"));
                     city.setChanceOfRain(response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONArray("hour").optJSONObject(0).getInt("chance_of_rain"));
+                    city.setChanceOfSnow(response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONArray("hour").optJSONObject(0).getInt("chance_of_snow"));
                     city.setHumidity(response.getJSONObject("current").getInt("humidity"));
                     city.setUvIndex((float) response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONObject("day").getDouble("uv"));
                     city.setWeatherCondition(response.getJSONObject("current").getJSONObject("condition").getString("text"));
@@ -97,9 +102,7 @@ public class Forecast implements Serializable{
         syncHttpClient = new SyncHttpClient();
         requestParams = new RequestParams();
         requestParams.add("key", API_KEY);
-        if(requestParams.has("hour")){
-            requestParams.remove("hour");
-        }
+        requestParams.add("days", Integer.toString(2));
         if(!(city.getName().isEmpty())) {
             requestParams.add("q", city.getName());
         } else {
@@ -109,29 +112,44 @@ public class Forecast implements Serializable{
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                JSONArray hourlyForecastJSON = null;
-                String[] weatherConditionHourly = new String[24];
-                float[] temperatureHourly = new float[24];
-                int[] chanceOfRainHourly = new int[24];
+                JSONArray dayOneJSON;
+                JSONArray dayTwoJSON;
                 try {
-                    hourlyForecastJSON = response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONArray("hour");
-                    if(city.getIsMetric())
-                    {
-                        for(int i = 0; i < 24; i++){
-                            temperatureHourly[i] = (float) hourlyForecastJSON.optJSONObject(i).getDouble("temp_c");
-                            chanceOfRainHourly[i] = hourlyForecastJSON.optJSONObject(i).getInt("chance_of_rain");
-                            weatherConditionHourly[i] = hourlyForecastJSON.optJSONObject(i).getJSONObject("condition").getString("text");
+                    dayOneJSON = response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONArray("hour");
+                    dayTwoJSON = response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(1).getJSONArray("hour");
+                    int count;
+                    int i;
+                    if(city.getIsMetric()){
+                        for(i = getCurrentHour(), count = 0; i < 24; i++, count++){
+                            city.hourly[count].setCurrentTemperature((float) dayOneJSON.optJSONObject(i).getDouble("temp_c"));
+                            city.hourly[count].setRain(dayOneJSON.optJSONObject(i).getInt("chance_of_rain"));
+                            city.hourly[count].setWeather(dayOneJSON.optJSONObject(i).getJSONObject("condition").getString("text"));
+                            city.hourly[count].setHour(dayOneJSON.optJSONObject(i).getString("time"));
+                        }
+                        if(count < 24){
+                            for(i = 0; i < 24 - count; i++, count++){
+                                city.hourly[count].setCurrentTemperature((float) dayTwoJSON.optJSONObject(i).getDouble("temp_c"));
+                                city.hourly[count].setRain(dayTwoJSON.optJSONObject(i).getInt("chance_of_rain"));
+                                city.hourly[count].setWeather(dayTwoJSON.optJSONObject(i).getJSONObject("condition").getString("text"));
+                                city.hourly[count].setHour(dayTwoJSON.optJSONObject(i).getString("time"));
+                            }
                         }
                     } else {
-                        for(int i = 0; i < 24; i++){
-                            temperatureHourly[i] = (float) hourlyForecastJSON.optJSONObject(i).getDouble("temp_f");
-                            chanceOfRainHourly[i] = hourlyForecastJSON.optJSONObject(i).getInt("chance_of_rain");
-                            weatherConditionHourly[i] = hourlyForecastJSON.optJSONObject(i).getJSONObject("condition").getString("text");
+                        for(i = getCurrentHour(), count = 0; i < 24; i++, count++){
+                            city.hourly[count].setCurrentTemperature((float) dayOneJSON.optJSONObject(i).getDouble("temp_f"));
+                            city.hourly[count].setRain(dayOneJSON.optJSONObject(i).getInt("chance_of_rain"));
+                            city.hourly[count].setWeather(dayOneJSON.optJSONObject(i).getJSONObject("condition").getString("text"));
+                            city.hourly[count].setHour(dayOneJSON.optJSONObject(i).getString("time"));
+                        }
+                        if(count < 24){
+                            for(i = 0; i < 24 - count; i++, count++){
+                                city.hourly[count].setCurrentTemperature((float) dayTwoJSON.optJSONObject(i).getDouble("temp_f"));
+                                city.hourly[count].setRain(dayTwoJSON.optJSONObject(i).getInt("chance_of_rain"));
+                                city.hourly[count].setWeather(dayTwoJSON.optJSONObject(i).getJSONObject("condition").getString("text"));
+                                city.hourly[count].setHour(dayTwoJSON.optJSONObject(i).getString("time"));
+                            }
                         }
                     }
-                    city.setTemperatureHourly(temperatureHourly);
-                    city.setChanceOfRainHourly(chanceOfRainHourly);
-                    city.setWeatherConditionHourly(weatherConditionHourly);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

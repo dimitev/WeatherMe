@@ -6,17 +6,13 @@ import android.graphics.drawable.Drawable;
 
 import java.io.Serializable;
 
-//TODO Serialize Forecast and SearchForCity classes -> done but is it working
-//TODO @Override toString() method in both of the above classes -> done but is it working
 public class CityInfo extends BaseObservable implements Serializable {
     private static final long serialVersionUID = 1;
     //transient vars are not due to serialization
     transient private SearchForCity searchForCity;
     public Forecast forecast;
+    public Hourly[] hourly = new Hourly[24];
     private String lastUpdated;
-    private String[] weatherConditionHourly;
-    private float[] temperatureHourly;
-    private int[] chanceOfRainHourly;
     private String name = "";
     private String region = "";
     private String country = "";
@@ -33,9 +29,9 @@ public class CityInfo extends BaseObservable implements Serializable {
     private float uvIndex;
     private int humidity;
     private int chanceOfRain;
+    private int chanceOfSnow;
     private boolean isMetric;
     private boolean isDay;
-    public Hourly[] hourly = new Hourly[24];
 
     public CityInfo() {
     }
@@ -44,23 +40,17 @@ public class CityInfo extends BaseObservable implements Serializable {
         this.name = name;
         this.lat = lat;
         this.lon = lon;
-        weatherConditionHourly = new String[24];
-        temperatureHourly = new float[24];
-        chanceOfRainHourly = new int[24];
         this.isMetric = isMetric;
         forecast = new Forecast();
         //forecast.getHourlyForecast();
         notifyPropertyChanged(BR._all);
         for (int i = 0; i < 24; i++)
-            hourly[i] = new Hourly(1, 5, "good", 5);
+            hourly[i] = new Hourly(22, 5, i, "sunny");
     }
 
     public CityInfo(float lat, float lon, boolean isMetric) {
         this.lat = lat;
         this.lon = lon;
-        weatherConditionHourly = new String[24];
-        temperatureHourly = new float[24];
-        chanceOfRainHourly = new int[24];
         this.isMetric = isMetric;
         forecast = new Forecast();
         //forecast.getHourlyForecast();
@@ -70,15 +60,14 @@ public class CityInfo extends BaseObservable implements Serializable {
     //In order to serialize the object properly
     @Override
     public String toString() {
-        return "CityInfo[forecast=" + forecast.toString() + "lastUpdated=" + lastUpdated + ", weatherConditionHourly=" + weatherConditionHourly.toString() +
-                ", temperatureHourly=" + temperatureHourly.toString() + ", chanceOfRainHourly=" + chanceOfRainHourly.toString() +
+        return "CityInfo[forecast=" + forecast.toString() + "lastUpdated=" + lastUpdated + ", hourly=" + hourly.toString() +
                 ", name=" + name + ", region=" + region + ", country=" + country +
                 ", weatherCondition=" + weatherCondition + ", windDirection=" + windDirection +
                 ", cloudCoverage=" + cloudCoverage + ", currentTemperature=" + currentTemperature +
                 ", minimumTemperature=" + minimumTemperature + ", maximumTemperature=" + maximumTemperature +
                 ", windSpeed=" + windSpeed + ", atmPressure=" + atmPressure +
                 ", lat=" + lat + ", lon=" + lon + ", uvIndex=" + uvIndex +
-                ", humidity=" + humidity + ", chanceOfRain=" + chanceOfRain + ", isMetric=" + isMetric + ", isDay=" + isDay +
+                ", humidity=" + humidity + ", chanceOfRain=" + chanceOfRain + ", chanceOfSnow=" + chanceOfSnow + ", isMetric=" + isMetric + ", isDay=" + isDay +
                 "]";
     }
 
@@ -172,20 +161,10 @@ public class CityInfo extends BaseObservable implements Serializable {
         notifyPropertyChanged(BR._all);
     }
 
-    public void setWeatherConditionHourly(String[] weatherConditionHourly) {
-        this.weatherConditionHourly = weatherConditionHourly;
+   public void setHourly(Hourly[] hourly){
+        this.hourly = hourly;
         notifyPropertyChanged(BR._all);
-    }
-
-    public void setTemperatureHourly(float[] temperatureHourly) {
-        this.temperatureHourly = temperatureHourly;
-        notifyPropertyChanged(BR._all);
-    }
-
-    public void setChanceOfRainHourly(int[] chanceOfRainHourly) {
-        this.chanceOfRainHourly = chanceOfRainHourly;
-        notifyPropertyChanged(BR._all);
-    }
+   }
 
     public void setRegion(String region) {
         this.region = region;
@@ -202,6 +181,14 @@ public class CityInfo extends BaseObservable implements Serializable {
         notifyPropertyChanged(BR._all);
     }
 
+    public int getChanceOfSnow() {
+        return chanceOfSnow;
+    }
+
+    public void setChanceOfSnow(int chanceOfSnow) {
+        this.chanceOfSnow = chanceOfSnow;
+    }
+
     @Bindable
     public boolean getIsDay() {
         return isDay;
@@ -213,19 +200,7 @@ public class CityInfo extends BaseObservable implements Serializable {
     }
 
     @Bindable
-    public String[] getWeatherConditionHourly() {
-        return weatherConditionHourly;
-    }
-
-    @Bindable
-    public float[] getTemperatureHourly() {
-        return temperatureHourly;
-    }
-
-    @Bindable
-    public int[] getChanceOfRainHourly() {
-        return chanceOfRainHourly;
-    }
+    public Hourly[] getHourly(){return hourly;}
 
     @Bindable
     public String getName() {
@@ -244,6 +219,8 @@ public class CityInfo extends BaseObservable implements Serializable {
 
     public void setWeatherConditionImage(String v) {
     }
+
+
 
     @Bindable
     public Drawable getWeatherConditionImage() {

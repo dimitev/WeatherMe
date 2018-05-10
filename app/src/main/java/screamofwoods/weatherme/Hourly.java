@@ -6,36 +6,37 @@ import android.databinding.Bindable;
 import java.io.Serializable;
 
 public class Hourly extends BaseObservable implements Serializable {
-    private float minimumTemperature;
-    private float maximumTemperature;
-    private float rain;
+    private float currentTemperature;
+    private int rain;
     private String weather;
+    private String hour;
 
     public Hourly() {
+
     }
 
-    public Hourly(float min, float max, String weather, float rain) {
-        this.setMaximumTemperature(max);
-        this.setMinimumTemperature(min);
+    public Hourly(float cur, int rain, String hour, String weather) {
+        this.setCurrentTemperature(cur);
         this.setRain(rain);
+        this.setHour(hour);
         this.setWeather(weather);
     }
 
     //In order to serialize the object properly
     @Override
     public String toString() {
-        return "Hourly[minimumTemperature=" + minimumTemperature + ", maximumTemperature=" + maximumTemperature + ", weatherCondition=" + weather +
+        return "Hourly[currentTemperature=" + currentTemperature + ", hour=" + hour + ", weatherCondition=" + weather +
                 ", rain=" + rain + "]";
     }
 
     @Bindable
-    public float getMinimumTemperature() {
-        return minimumTemperature;
+    public float getCurrentTemperature() {
+        return currentTemperature;
     }
 
     @Bindable
-    public float getMaximumTemperature() {
-        return maximumTemperature;
+    public String getHour() {
+        return hour;
     }
 
     @Bindable
@@ -48,15 +49,15 @@ public class Hourly extends BaseObservable implements Serializable {
         return weather;
     }
 
-    public void setMinimumTemperature(Float minimumTemperature) {
-        this.minimumTemperature = minimumTemperature;
+    public void setCurrentTemperature(Float currentTemperature) {
+        this.currentTemperature = currentTemperature;
     }
 
-    public void setMaximumTemperature(Float maximumTemperature) {
-        this.maximumTemperature = maximumTemperature;
+    public void setHour(String hour) {
+        this.hour = hour;
     }
 
-    public void setRain(Float rain) {
+    public void setRain(int rain) {
         this.rain = rain;
     }
 
