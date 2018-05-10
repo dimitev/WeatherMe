@@ -18,7 +18,7 @@ import cz.msebera.android.httpclient.Header;
 public class SearchForCity {
     public static List<CityInfo> citiesFound = new ArrayList<CityInfo>();
     private static final String BASE_URL = "http://api.apixu.com/v1/search.json";
-    private static final String API_KEY = "9593a63a2df64b31bfe183434180204";
+    private static final String API_KEY = "9a86c637d9e14547890131921181005";
     private AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
     private RequestParams requestParams = new RequestParams();
     private String name = "";
