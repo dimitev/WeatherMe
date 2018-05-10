@@ -130,11 +130,13 @@ public class Forecast implements Serializable{
                             Log.e("Temp",  "Hour " + count + " " + city.hourly[count].getCurrentTemperature());
                         }
                         if(count < 24){
-                            for(i = 0; i < 24 - count; i++, count++){
+                            //for(i = 0; i < 24 - count; i++, count++){
+                            for(i = 0; count<24; i++, count++){
                                 city.hourly[count].setCurrentTemperature((float) dayTwoJSON.optJSONObject(i).getDouble("temp_c"));
                                 city.hourly[count].setRain(dayTwoJSON.optJSONObject(i).getInt("chance_of_rain"));
                                 city.hourly[count].setWeather(dayTwoJSON.optJSONObject(i).getJSONObject("condition").getString("text"));
                                 city.hourly[count].setHour(dayTwoJSON.optJSONObject(i).getString("time"));
+                                Log.e("Temp",  "Hour " + count + " " + city.hourly[count].getCurrentTemperature());
                             }
                         }
                     } else {

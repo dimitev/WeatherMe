@@ -2,14 +2,17 @@ package screamofwoods.weatherme;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.graphics.drawable.Drawable;
 
 import java.io.Serializable;
 
+import static screamofwoods.weatherme.CityInfo.getWeatherConditionImage;
+
 public class Hourly extends BaseObservable implements Serializable {
-    private float currentTemperature;
-    private int rain;
-    private String weather;
-    private String hour;
+    private float currentTemperature=0;
+    private int rain=0;
+    private String weather="";
+    private String hour=" x";
 
     public Hourly() {
 
@@ -21,7 +24,14 @@ public class Hourly extends BaseObservable implements Serializable {
         this.setHour(hour);
         this.setWeather(weather);
     }
-
+    public void Copy(Hourly n)
+    {
+        this.currentTemperature=n.currentTemperature;
+        this.rain=n.rain;
+        this.weather=n.weather;
+        this.hour=n.hour;
+        notifyPropertyChanged(BR._all);
+    }
     //In order to serialize the object properly
     @Override
     public String toString() {
@@ -32,11 +42,12 @@ public class Hourly extends BaseObservable implements Serializable {
     @Bindable
     public float getCurrentTemperature() {
         return currentTemperature;
+
     }
 
     @Bindable
     public String getHour() {
-        return hour;
+        return !hour.equals("")&&hour!=null ? hour.split(" ")[1]:"-";
     }
 
     @Bindable
@@ -45,23 +56,27 @@ public class Hourly extends BaseObservable implements Serializable {
     }
 
     @Bindable
-    public String getWeather() {
-        return weather;
+    public Drawable getWeather() {
+        return getWeatherConditionImage(this.weather);
     }
 
     public void setCurrentTemperature(Float currentTemperature) {
         this.currentTemperature = currentTemperature;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setHour(String hour) {
         this.hour = hour;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setRain(int rain) {
         this.rain = rain;
+        notifyPropertyChanged(BR._all);
     }
 
     public void setWeather(String weather) {
         this.weather = weather;
+        notifyPropertyChanged(BR._all);
     }
 }

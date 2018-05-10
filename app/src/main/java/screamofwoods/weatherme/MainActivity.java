@@ -33,6 +33,7 @@ import screamofwoods.weatherme.databinding.ActivityMainBinding;
 
 //TODO fix setting the city by gps coordinates!!!
 //TODO HINT -> setCurrent and WeatherGetterOnce and WeatherGetterPeriodically are messed up when called with the gps
+//TODO response time check, use OnFaliure
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static ActivityMainBinding binding;//the binding between the classes and UI
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView mRecyclerView;//for the list of cities
     public static RecyclerView.Adapter mAdapter;//for the list of cities
     private RecyclerView.LayoutManager mLayoutManager;//for the list of cities
-    private RecyclerView mRecyclerViewHourly;//for the list of hourly forecast
+    private static RecyclerView mRecyclerViewHourly;//for the list of hourly forecast
     public static RecyclerView.Adapter mAdapterHourly;//for the list of hourly forecast
     private RecyclerView.LayoutManager mLayoutManagerHourly;//for the list of hourly forecast
     //private WeatherGetterPeriodically weatherGetterPeriodically;//the background service for updating
@@ -69,6 +70,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static void setCurrent(CityInfo in) {
+        c.Copy(in);
+        mDrawerLayoutCities.closeDrawer(Gravity.END);
+        binding.notifyPropertyChanged(BR._all);
+        new WeatherGetterOnce(c, mainContext).start();
+        /*
 //        Log.e("SetCur called", in.getName());
         c = in;
         binding.setState(c);//sets the city to be shown in the activity_main
@@ -76,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding.hourlyContent.setState(c);
         binding.fiveDayContent.setState(c);
         mDrawerLayoutCities.closeDrawer(Gravity.END);
+        mAdapterHourly = new MyAdapterHourly(MainActivity.c.hourly);
+        mRecyclerViewHourly.setAdapter(mAdapterHourly);
+        mAdapterHourly.notifyDataSetChanged();*/
         if (jobScheduler != null) {//TODO fix NPE here
             jobScheduler.cancel(1); //Cancel the current job that's responsible for updating
             jobScheduler.schedule(jobInfo); //Reschedule the job
@@ -147,11 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //Change selected city from right hand side list
             @Override
             public void onClick(View view, int position) {
-                CityInfo city = UserCities.get(position);
-                // Toast.makeText(getApplicationContext(), city.getName() + " is selected!", Toast.LENGTH_SHORT).show();
-                c = city;
-                new WeatherGetterOnce(c, mainContext).start();
-                setCurrent(c);
+                 setCurrent(UserCities.get(position));
             }
 
             @Override
@@ -208,6 +213,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);//creates the binding
         binding.setState(c);//sets the city to be shown in the activity_main
         binding.currentContent.setState(c);//sets the city to be shown in the content
+        binding.hourlyContent.setState(c);
+        binding.fiveDayContent.setState(c);
         binding.swiperefresh.setOnRefreshListener(//swipe down to refresh listener
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override

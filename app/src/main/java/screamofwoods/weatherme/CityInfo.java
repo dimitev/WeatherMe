@@ -34,6 +34,35 @@ public class CityInfo extends BaseObservable implements Serializable {
     private boolean isDay;
 
     public CityInfo() {
+        for (int i = 0; i < 24; i++)
+            hourly[i] = new Hourly();
+    }
+
+    public void Copy(CityInfo n) {
+        this.forecast = new Forecast();
+        for (int i = 0; i < 24; i++)
+            this.hourly[i].Copy(n.hourly[i]);
+        this.lastUpdated = n.lastUpdated;
+        this.name = n.name;
+        this.region = n.region;
+        this.country = n.country;
+        this.weatherCondition = n.weatherCondition;
+        this.windDirection = n.windDirection; //Compass N, E, S, W, etc...
+        this.cloudCoverage = n.cloudCoverage;
+        this.currentTemperature = n.currentTemperature;
+        this.minimumTemperature = n.minimumTemperature;
+        this.maximumTemperature = n.maximumTemperature;
+        this.windSpeed = n.windSpeed;
+        this.atmPressure = n.atmPressure;
+        this.lat = n.lat;
+        this.lon = n.lon;
+        this.uvIndex = n.uvIndex;
+        this.humidity = n.humidity;
+        this.chanceOfRain = n.chanceOfRain;
+        this.chanceOfSnow = n.chanceOfSnow;
+        this.isMetric = n.isMetric;
+        this.isDay = n.isDay;
+        notifyPropertyChanged(BR._all);
     }
 
     public CityInfo(String name, float lat, float lon, boolean isMetric) {
@@ -54,6 +83,8 @@ public class CityInfo extends BaseObservable implements Serializable {
         this.isMetric = isMetric;
         forecast = new Forecast();
         //forecast.getHourlyForecast();
+        for (int i = 0; i < 24; i++)
+            hourly[i] = new Hourly();
         notifyPropertyChanged(BR._all);
     }
 
@@ -161,10 +192,10 @@ public class CityInfo extends BaseObservable implements Serializable {
         notifyPropertyChanged(BR._all);
     }
 
-   public void setHourly(Hourly[] hourly){
+    public void setHourly(Hourly[] hourly) {
         this.hourly = hourly;
         notifyPropertyChanged(BR._all);
-   }
+    }
 
     public void setRegion(String region) {
         this.region = region;
@@ -200,7 +231,9 @@ public class CityInfo extends BaseObservable implements Serializable {
     }
 
     @Bindable
-    public Hourly[] getHourly(){return hourly;}
+    public Hourly[] getHourly() {
+        return hourly;
+    }
 
     @Bindable
     public String getName() {
@@ -220,11 +253,7 @@ public class CityInfo extends BaseObservable implements Serializable {
     public void setWeatherConditionImage(String v) {
     }
 
-
-
-    @Bindable
-    public Drawable getWeatherConditionImage() {
-        String w = getWeatherCondition();
+    public static Drawable getWeatherConditionImage(String w) {
         if (w == null) return null;
         //return "" + R.drawable.fog;/*
         //Log.d("GetImage", w);
@@ -261,6 +290,12 @@ public class CityInfo extends BaseObservable implements Serializable {
 
         //clear
         return null;
+    }
+
+
+    @Bindable
+    public Drawable getWeatherConditionImage() {
+        return getWeatherConditionImage(getWeatherCondition());
     }
 
     @Bindable
