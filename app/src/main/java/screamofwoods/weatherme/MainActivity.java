@@ -36,7 +36,7 @@ import screamofwoods.weatherme.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static ActivityMainBinding binding;//the binding between the classes and UI
-    public static CityInfo c;//test city-current city
+    public static CityInfo c=new CityInfo();//test city-current city
     public static ArrayList<CityInfo> UserCities = new ArrayList<CityInfo>();//list of user cities,should be saved on restart
     private static JobScheduler jobScheduler;
     private static JobInfo jobInfo;

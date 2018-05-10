@@ -49,7 +49,6 @@ public class MyAdapterHourly extends RecyclerView.Adapter<MyAdapterHourly.MyView
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        mDataset=new Hourly[24];
         return mDataset.length;
     }
 }

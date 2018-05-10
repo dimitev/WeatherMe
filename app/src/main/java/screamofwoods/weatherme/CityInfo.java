@@ -38,7 +38,6 @@ public class CityInfo extends BaseObservable implements Serializable {
     public Hourly[] hourly = new Hourly[24];
 
     public CityInfo() {
-
     }
 
     public CityInfo(String name, float lat, float lon, boolean isMetric) {
@@ -48,7 +47,6 @@ public class CityInfo extends BaseObservable implements Serializable {
         weatherConditionHourly = new String[24];
         temperatureHourly = new float[24];
         chanceOfRainHourly = new int[24];
-        hourly = new Hourly[24];
         this.isMetric = isMetric;
         forecast = new Forecast();
         //forecast.getHourlyForecast();
@@ -63,7 +61,6 @@ public class CityInfo extends BaseObservable implements Serializable {
         weatherConditionHourly = new String[24];
         temperatureHourly = new float[24];
         chanceOfRainHourly = new int[24];
-        hourly = new Hourly[24];
         this.isMetric = isMetric;
         forecast = new Forecast();
         //forecast.getHourlyForecast();
