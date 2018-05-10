@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/txtHourLabel"
             android:layout_centerHorizontal="true"
-            android:text="@{String.valueOf(hour.minimumTemperature)}"
+            android:text="@{String.valueOf(hour.currentTemperature)}"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="20dp" />

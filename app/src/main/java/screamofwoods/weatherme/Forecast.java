@@ -1,6 +1,7 @@
 package screamofwoods.weatherme;
 
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 
 import com.loopj.android.http.SyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -99,6 +100,7 @@ public class Forecast implements Serializable{
     }
 
     public void getHourlyForecast(final CityInfo city){
+        Log.e("Ari", "wa");
         syncHttpClient = new SyncHttpClient();
         requestParams = new RequestParams();
         requestParams.add("key", API_KEY);
@@ -125,6 +127,7 @@ public class Forecast implements Serializable{
                             city.hourly[count].setRain(dayOneJSON.optJSONObject(i).getInt("chance_of_rain"));
                             city.hourly[count].setWeather(dayOneJSON.optJSONObject(i).getJSONObject("condition").getString("text"));
                             city.hourly[count].setHour(dayOneJSON.optJSONObject(i).getString("time"));
+                            Log.e("Temp",  "Hour " + count + " " + city.hourly[count].getCurrentTemperature());
                         }
                         if(count < 24){
                             for(i = 0; i < 24 - count; i++, count++){

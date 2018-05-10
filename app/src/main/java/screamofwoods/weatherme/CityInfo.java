@@ -45,7 +45,7 @@ public class CityInfo extends BaseObservable implements Serializable {
         //forecast.getHourlyForecast();
         notifyPropertyChanged(BR._all);
         for (int i = 0; i < 24; i++)
-            hourly[i] = new Hourly(22, 5, i, "sunny");
+            hourly[i] = new Hourly();
     }
 
     public CityInfo(float lat, float lon, boolean isMetric) {
