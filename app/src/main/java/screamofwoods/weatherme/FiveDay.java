@@ -7,10 +7,10 @@ import java.io.Serializable;
 
 public class FiveDay extends BaseObservable implements Serializable {
     private static final long serialVersionUID = 4;
-    private String condition;
-    private String date;
-    private float minTemp;
-    private float maxTemp;
+    private String condition = "";
+    private String date = "";
+    private float minTemp = (float) 0.0;
+    private float maxTemp = (float) 0.0;
 
     @Override
     public String toString() {

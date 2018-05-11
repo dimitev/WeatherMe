@@ -35,7 +35,7 @@ public class Forecast implements Serializable{
             if(currentHour == 23) {
                 currentHour = 0;
             }else {
-                currentHour++;
+                ++currentHour;
             }
         }
         return currentHour;
@@ -44,6 +44,7 @@ public class Forecast implements Serializable{
         syncHttpClient = new SyncHttpClient();
         requestParams = new RequestParams();
         requestParams.add("key", API_KEY);
+        requestParams.add("days", "5");
         if(!(city.getName().isEmpty())) {
             requestParams.add("q", city.getName());
         } else {
@@ -115,7 +116,7 @@ public class Forecast implements Serializable{
                     city.hourly[count].setRain(dayOneJSON.optJSONObject(i).getInt("chance_of_rain"));
                     city.hourly[count].setWeather(dayOneJSON.optJSONObject(i).getJSONObject("condition").getString("text"));
                     city.hourly[count].setHour(dayOneJSON.optJSONObject(i).getString("time"));
-                    Log.e("Temp",  "Hour " + count + " " + city.hourly[count].getCurrentTemperature());
+                    Log.e("Temp",  "Hour " + i + " " + city.hourly[count].getCurrentTemperature());
                 }
                 if(count < 24){
                     //for(i = 0; i < 24 - count; i++, count++){
@@ -124,7 +125,7 @@ public class Forecast implements Serializable{
                         city.hourly[count].setRain(dayTwoJSON.optJSONObject(i).getInt("chance_of_rain"));
                         city.hourly[count].setWeather(dayTwoJSON.optJSONObject(i).getJSONObject("condition").getString("text"));
                         city.hourly[count].setHour(dayTwoJSON.optJSONObject(i).getString("time"));
-                        Log.e("Temp",  "Hour " + count + " " + city.hourly[count].getCurrentTemperature());
+                        //Log.e("Temp",  "Hour " + count + " " + city.hourly[count].getCurrentTemperature());
                     }
                 }
             } else {

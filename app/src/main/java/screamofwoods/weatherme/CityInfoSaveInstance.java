@@ -74,6 +74,7 @@ public class CityInfoSaveInstance{
         {
             File fl = new File(appContext.getFilesDir(), FILELIST);
             File fc = new File(appContext.getFilesDir(), FILECURRENT);
+            Log.e("read", "kur");
             if(fl.exists()) {
                 FileInputStream fis = new FileInputStream(fl);
                 ObjectInputStream ois = new ObjectInputStream(fis);
@@ -100,6 +101,9 @@ public class CityInfoSaveInstance{
                 if (currentCity != null) {
                     MainActivity.c = currentCity;
                 }
+            }
+            else{
+                //Log.e();
             }
         }catch(IOException ioe){
             Log.e("IOException read", "Shit is bad man");

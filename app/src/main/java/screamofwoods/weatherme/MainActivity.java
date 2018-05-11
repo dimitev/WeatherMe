@@ -31,13 +31,15 @@ import java.util.ArrayList;
 
 import screamofwoods.weatherme.databinding.ActivityMainBinding;
 
+import static com.loopj.android.http.AsyncHttpClient.log;
+
 //TODO fix setting the city by gps coordinates!!!
 //TODO HINT -> setCurrent and WeatherGetterOnce and WeatherGetterPeriodically are messed up when called with the gps
 //TODO response time check, use OnFaliure
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static ActivityMainBinding binding;//the binding between the classes and UI
-    public static CityInfo c=new CityInfo();//test city-current city
+    public static CityInfo c = new CityInfo();//test city-current city
     public static ArrayList<CityInfo> UserCities = new ArrayList<CityInfo>();//list of user cities,should be saved on restart
     private static JobScheduler jobScheduler;
     private static JobInfo jobInfo;
@@ -70,10 +72,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static void setCurrent(CityInfo in) {
+        if(c == null){
+            log.e("C is NULL", "FUCK FUCK FUCK");
+        }
         c.Copy(in);
         mDrawerLayoutCities.closeDrawer(Gravity.END);
         binding.notifyPropertyChanged(BR._all);
-        new WeatherGetterOnce(c, mainContext).start();
+        //new WeatherGetterOnce(c, mainContext).start();
         /*
 //        Log.e("SetCur called", in.getName());
         c = in;
@@ -109,9 +114,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //UserCities.add(c);
         //c.forecast.getMomentForecast();//gets some forecast
         if (cityInfoSaveInstance.readCitiesList()) {
+            log.e("file io", "asdf: " + (c==null? "true":"false"));
             Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
             startActivity(intent);
         }
+        //new WeatherGetterOnce(c, this).start();
         prepareBinding();
         prepareToolbar();
         prepareRightDrawer();

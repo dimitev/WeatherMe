@@ -35,18 +35,20 @@ public class CityInfo extends BaseObservable implements Serializable {
     private boolean isDay;
 
     public CityInfo() {
-        int i,j;
-        for (i =0, j = 0; i < 24; i++, j++)
+        for (int i =0; i < 24; i++) {
             hourly[i] = new Hourly();
-            if(j < 5){
-                fiveDay[j] = new FiveDay();
-            }
+        }
+        for(int i = 0; i < 5; i++){
+            fiveDay[i] = new FiveDay();
+        }
     }
 
     public void Copy(CityInfo n) {
         this.forecast = new Forecast();
         for (int i = 0; i < 24; i++)
             this.hourly[i].Copy(n.hourly[i]);
+        for (int i = 0; i < 5; i++)
+            this.fiveDay[i].Copy(n.fiveDay[i]);
         this.lastUpdated = n.lastUpdated;
         this.name = n.name;
         this.region = n.region;
@@ -80,6 +82,10 @@ public class CityInfo extends BaseObservable implements Serializable {
         notifyPropertyChanged(BR._all);
         for (int i = 0; i < 24; i++)
             hourly[i] = new Hourly();
+        for(int i = 0; i < 5; i++){
+            fiveDay[i] = new FiveDay();
+        }
+
     }
 
     public CityInfo(float lat, float lon, boolean isMetric) {
@@ -90,6 +96,9 @@ public class CityInfo extends BaseObservable implements Serializable {
         //forecast.getHourlyForecast();
         for (int i = 0; i < 24; i++)
             hourly[i] = new Hourly();
+        for(int i = 0; i < 5; i++){
+            fiveDay[i] = new FiveDay();
+        }
         notifyPropertyChanged(BR._all);
     }
 
