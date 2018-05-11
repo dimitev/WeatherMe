@@ -13,6 +13,7 @@ public class UpdateForecastAsync extends AsyncTask<CityInfo, Void, Void> {
             Log.e("AsyncTask", "Updating: " + city[0].getName());
             city[0].forecast.getMomentForecast(city[0]);
             city[0].forecast.getHourlyForecast(city[0]);
+            city[0].forecast.getFiveDayForecast(city[0]);
         }
         return null;
     }

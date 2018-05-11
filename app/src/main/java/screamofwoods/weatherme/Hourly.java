@@ -9,6 +9,7 @@ import java.io.Serializable;
 import static screamofwoods.weatherme.CityInfo.getWeatherConditionImage;
 
 public class Hourly extends BaseObservable implements Serializable {
+    private static final long serialVersionUID = 3;
     private float currentTemperature=0;
     private int rain=0;
     private String weather="";
@@ -18,12 +19,6 @@ public class Hourly extends BaseObservable implements Serializable {
 
     }
 
-    public Hourly(float cur, int rain, String hour, String weather) {
-        this.setCurrentTemperature(cur);
-        this.setRain(rain);
-        this.setHour(hour);
-        this.setWeather(weather);
-    }
     public void Copy(Hourly n)
     {
         this.currentTemperature=n.currentTemperature;

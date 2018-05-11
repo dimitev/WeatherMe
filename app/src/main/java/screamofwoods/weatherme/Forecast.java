@@ -100,7 +100,6 @@ public class Forecast implements Serializable{
     }
 
     public void getHourlyForecast(final CityInfo city){
-        Log.e("Ari", "wa");
         syncHttpClient = new SyncHttpClient();
         requestParams = new RequestParams();
         requestParams.add("key", API_KEY);
@@ -152,6 +151,45 @@ public class Forecast implements Serializable{
                                 city.hourly[count].setRain(dayTwoJSON.optJSONObject(i).getInt("chance_of_rain"));
                                 city.hourly[count].setWeather(dayTwoJSON.optJSONObject(i).getJSONObject("condition").getString("text"));
                                 city.hourly[count].setHour(dayTwoJSON.optJSONObject(i).getString("time"));
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void getFiveDayForecast(final CityInfo city){
+        syncHttpClient = new SyncHttpClient();
+        requestParams = new RequestParams();
+        requestParams.add("key", API_KEY);
+        requestParams.add("days", Integer.toString(5));
+        requestParams.add("hour", Integer.toString(0));
+        if(!(city.getName().isEmpty())) {
+            requestParams.add("q", city.getName());
+        } else {
+            requestParams.add("q", Float.toString(city.getLat()) + "," + Float.toString(city.getLon()));
+        }
+        syncHttpClient.get(BASE_URL, requestParams, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                JSONArray dayJSON;
+                try {
+                    dayJSON = response.getJSONObject("forecast").getJSONArray("forecastday");
+                    int i;
+                    if(city.getIsMetric()) {
+                        for (i = 0; i < 5; i++) {
+                            city.fiveDay[i].setCondition(dayJSON.optJSONObject(i).getJSONObject("day").getJSONObject("condition").getString("text"));
+                            city.fiveDay[i].setDate(dayJSON.optJSONObject(i).getString("date"));
+                            if(city.getIsMetric()){
+                                city.fiveDay[i].setMinTemp((float) dayJSON.optJSONObject(i).getJSONObject("day").getDouble("mintemp_c"));
+                                city.fiveDay[i].setMaxTemp((float) dayJSON.optJSONObject(i).getJSONObject("day").getDouble("maxtemp_c"));
+                            } else {
+                                city.fiveDay[i].setMinTemp((float) dayJSON.optJSONObject(i).getJSONObject("day").getDouble("mintemp_f"));
+                                city.fiveDay[i].setMaxTemp((float) dayJSON.optJSONObject(i).getJSONObject("day").getDouble("maxtemp_f"));
                             }
                         }
                     }

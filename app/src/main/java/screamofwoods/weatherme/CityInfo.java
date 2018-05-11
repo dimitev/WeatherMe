@@ -12,6 +12,7 @@ public class CityInfo extends BaseObservable implements Serializable {
     transient private SearchForCity searchForCity;
     public Forecast forecast;
     public Hourly[] hourly = new Hourly[24];
+    public FiveDay[] fiveDay = new FiveDay[5];
     private String lastUpdated;
     private String name = "";
     private String region = "";
@@ -34,8 +35,12 @@ public class CityInfo extends BaseObservable implements Serializable {
     private boolean isDay;
 
     public CityInfo() {
-        for (int i = 0; i < 24; i++)
+        int i,j;
+        for (i =0, j = 0; i < 24; i++, j++)
             hourly[i] = new Hourly();
+            if(j < 5){
+                fiveDay[j] = new FiveDay();
+            }
     }
 
     public void Copy(CityInfo n) {
@@ -92,7 +97,7 @@ public class CityInfo extends BaseObservable implements Serializable {
     @Override
     public String toString() {
         return "CityInfo[forecast=" + forecast.toString() + "lastUpdated=" + lastUpdated + ", hourly=" + hourly.toString() +
-                ", name=" + name + ", region=" + region + ", country=" + country +
+                ", fiveDay=" + fiveDay.toString() + ", name=" + name + ", region=" + region + ", country=" + country +
                 ", weatherCondition=" + weatherCondition + ", windDirection=" + windDirection +
                 ", cloudCoverage=" + cloudCoverage + ", currentTemperature=" + currentTemperature +
                 ", minimumTemperature=" + minimumTemperature + ", maximumTemperature=" + maximumTemperature +
