@@ -65,8 +65,7 @@
                                 <include
                                     android:id="@+id/current_content"
                                     layout="@layout/current_content"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent" />
+                                    app:state="@{state}"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -77,8 +76,7 @@
                                 <include
                                     android:id="@+id/hourly_content"
                                     layout="@layout/hourly_content"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent" />
+                                    app:state="@{state}"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -88,7 +86,8 @@
 
                                 <include
                                     android:id="@+id/five_day_content"
-                                    layout="@layout/five_day_content" />
+                                    layout="@layout/five_day_content"
+                                    app:state="@{state}"/>
                             </LinearLayout>
                         </RelativeLayout>
 

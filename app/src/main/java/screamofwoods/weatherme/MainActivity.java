@@ -26,6 +26,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import java.util.ArrayList;
 
 import screamofwoods.weatherme.databinding.ActivityMainBinding;
@@ -53,40 +57,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CityInfoSaveInstance cityInfoSaveInstance;
     private CityInfo extraCity;//extra city for casual logic
     private static Context mainContext;
+    private GraphView FiveDayGraph;
+    public static int currentTab=0;
 
     //Constructor to run code once only @ the beginning of the App
     public MainActivity() {
         super();
         cityInfoSaveInstance = new CityInfoSaveInstance(this);
-        //cityInfoSaveInstance.readCitiesList();
-        //c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
-        //backgroundUpdateForecast();
-        //new WeatherGetterOnce(c).start();
-        //UserCities.add(c);
-        //CityInfo d = new CityInfo("Plovdiv", (float) 0, (float) 0, true);
-        //new WeatherGetterOnce(d).start();
-        //UserCities.add(d);//adds a secondary city for testing
     }
 
     public static void setCurrent(CityInfo in) {
         if (c == null) {
             log.e("C is NULL", "FUCK FUCK FUCK");
         }
-        c.Copy(in);
+        //c.Copy(in);
+        c=in;
+        binding.setState(c);
         mDrawerLayoutCities.closeDrawer(Gravity.END);
         binding.notifyPropertyChanged(BR._all);
-        //new WeatherGetterOnce(c, mainContext).start();
-        /*
-//        Log.e("SetCur called", in.getName());
-        c = in;
-        binding.setState(c);//sets the city to be shown in the activity_main
-        binding.currentContent.setState(c);
-        binding.hourlyContent.setState(c);
-        binding.fiveDayContent.setState(c);
-        mDrawerLayoutCities.closeDrawer(Gravity.END);
-        mAdapterHourly = new MyAdapterHourly(MainActivity.c.hourly);
-        mRecyclerViewHourly.setAdapter(mAdapterHourly);
-        mAdapterHourly.notifyDataSetChanged();*/
         if (jobScheduler != null) {//TODO fix NPE here
             jobScheduler.cancel(1); //Cancel the current job that's responsible for updating
             jobScheduler.schedule(jobInfo); //Reschedule the job
@@ -101,15 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         MainActivity.mainContext = getAppContext();
         mainContext = this;
-        //c=new CityInfo();
-
-        //read cities returns boolean -> if current city is null->true else false
-
-
-        //backgroundUpdateForecast();
-        //c = new CityInfo("Sofia", (float) 25.25, (float) 55.28, true);
-        //UserCities.add(c);
-        //c.forecast.getMomentForecast();//gets some forecast
         if (cityInfoSaveInstance.readCitiesList()) {
             log.e("file io", "asdf: " + (c == null ? "true" : "false"));
             Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
@@ -118,11 +97,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //new WeatherGetterOnce(c, this).start();
         prepareBinding();
         prepareToolbar();
-        prepareRightDrawer();
         prepareLeftDrawer();
+        prepareRightDrawer();
         prepareRecycler();//fills the cities drawer
         prepareRecyclerHourly();//fills the hourly forecast
         mAdapter.notifyDataSetChanged();//updates the drawer
+        FiveDayGraph = findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3)
+        });
+        FiveDayGraph.addSeries(series);
 
         //cityInfoSaveInstance.saveCitiesList();
     }
@@ -214,12 +200,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void SetVisiblePage(int i)//set the selected forecast,1-current,2-24h,3-5day
+    {
+        if (i == 0 || i == 1) {
+            binding.current.setVisibility(View.VISIBLE);//
+            binding.hourly.setVisibility(View.GONE);//sets the visible page
+            binding.fiveDay.setVisibility(View.GONE);//
+        } else {
+            if (i == 2) {
+                binding.current.setVisibility(View.GONE);//
+                binding.hourly.setVisibility(View.VISIBLE);//sets the visible page
+                binding.fiveDay.setVisibility(View.GONE);//
+            } else {
+                binding.current.setVisibility(View.GONE);//
+                binding.hourly.setVisibility(View.GONE);//sets the visible page
+                binding.fiveDay.setVisibility(View.VISIBLE);//
+            }
+        }
+    }
+
     private void prepareBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);//creates the binding
         binding.setState(c);//sets the city to be shown in the activity_main
-        binding.currentContent.setState(c);//sets the city to be shown in the content
-        binding.hourlyContent.setState(c);
-        binding.fiveDayContent.setState(c);
+        SetVisiblePage(currentTab);
+
         binding.currentContent.swiperefresh.setOnRefreshListener(//swipe down to refresh listener
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -316,53 +320,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
                 mDrawerLayout.closeDrawer(Gravity.START);//closes the other drawer of it was opened
-
             }
 
             @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-
-            }
-
+            public void onDrawerClosed(@NonNull View drawerView) {}
             @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
+            public void onDrawerStateChanged(int newState) {}
         });
     }
 
     private void prepareLeftDrawer() {
-        TextView current = findViewById(R.id.txtCurrent);
-        TextView hourly = findViewById(R.id.txtHourly);
-        TextView fiveday = findViewById(R.id.txtFiveday);
-        binding.hourly.setVisibility(View.GONE);//sets the visible page
-        binding.fiveDay.setVisibility(View.GONE);//
-        binding.current.setVisibility(View.VISIBLE);//
-        current.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.txtCurrent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDrawerLayout.closeDrawer(Gravity.START);
-                binding.hourly.setVisibility(View.GONE);
-                binding.fiveDay.setVisibility(View.GONE);
-                binding.current.setVisibility(View.VISIBLE);
+                MainActivity.currentTab = 1;
+                SetVisiblePage(currentTab);
             }
         });
-        hourly.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.txtHourly).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.current.setVisibility(View.GONE);
-                binding.hourly.setVisibility(View.VISIBLE);
-                binding.fiveDay.setVisibility(View.GONE);
                 mDrawerLayout.closeDrawer(Gravity.START);
+                MainActivity.currentTab = 2;
+                SetVisiblePage(currentTab);
             }
         });
-        fiveday.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.txtFiveday).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDrawerLayout.closeDrawer(Gravity.START);
-                binding.hourly.setVisibility(View.GONE);
-                binding.fiveDay.setVisibility(View.VISIBLE);
-                binding.current.setVisibility(View.GONE);
+                MainActivity.currentTab = 3;
+                SetVisiblePage(currentTab);
             }
         });
     }
