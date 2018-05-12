@@ -1,9 +1,11 @@
 package screamofwoods.weatherme;
 
+import android.app.AlertDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
@@ -393,6 +395,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 MainActivity.currentTab = 3;
                 SetVisiblePage(currentTab);
                 set5DayGraph();
+            }
+        });
+        findViewById(R.id.txtAbout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mainContext);
+                //Uncomment the below code to Set the message and title from the strings.xml file
+                //builder.setMessage(R.string.dialog_message) .setTitle(R.string.dialog_title);
+
+                //Setting message manually and performing action on button click
+                builder.setMessage("This weather application is made by Atanas Shalaverov and Dimitar Mitev to gather experience.")
+                        .setCancelable(true)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //finish();
+                            }
+                        });
+
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.setTitle("About");
+                alert.show();
             }
         });
     }
