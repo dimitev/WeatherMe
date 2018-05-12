@@ -15,7 +15,7 @@ import static screamofwoods.weatherme.MainActivity.getAppContext;
 
 public class AddCitiesActivity extends AppCompatActivity {
 
-    private RecyclerView mRecyclerView;//for the list of cities
+    public static RecyclerView mRecyclerView;//for the list of cities
     public static RecyclerView.Adapter mAdapter;//for the list of cities
     private RecyclerView.LayoutManager mLayoutManager;//for the list of cities
 

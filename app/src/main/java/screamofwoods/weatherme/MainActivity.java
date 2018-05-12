@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -57,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CityInfoSaveInstance cityInfoSaveInstance;
     private CityInfo extraCity;//extra city for casual logic
     private static Context mainContext;
-    private GraphView FiveDayGraph;
-    public static int currentTab=0;
+    private static GraphView FiveDayGraph;
+    public static int currentTab = 0;
 
     //Constructor to run code once only @ the beginning of the App
     public MainActivity() {
@@ -71,8 +73,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             log.e("C is NULL", "FUCK FUCK FUCK");
         }
         //c.Copy(in);
-        c=in;
+        c = in;
         binding.setState(c);
+        set5DayGraph();
+        mAdapterHourly = new MyAdapterHourly(MainActivity.c.hourly);
+        mRecyclerViewHourly.setAdapter(mAdapterHourly);
         mDrawerLayoutCities.closeDrawer(Gravity.END);
         binding.notifyPropertyChanged(BR._all);
         if (jobScheduler != null) {//TODO fix NPE here
@@ -96,19 +101,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         //new WeatherGetterOnce(c, this).start();
         prepareBinding();
+        set5DayGraph();
         prepareToolbar();
         prepareLeftDrawer();
         prepareRightDrawer();
         prepareRecycler();//fills the cities drawer
         prepareRecyclerHourly();//fills the hourly forecast
         mAdapter.notifyDataSetChanged();//updates the drawer
-        FiveDayGraph = findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3)
-        });
-        FiveDayGraph.addSeries(series);
 
         //cityInfoSaveInstance.saveCitiesList();
     }
@@ -323,10 +322,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             @Override
-            public void onDrawerClosed(@NonNull View drawerView) {}
+            public void onDrawerClosed(@NonNull View drawerView) {
+            }
+
             @Override
-            public void onDrawerStateChanged(int newState) {}
+            public void onDrawerStateChanged(int newState) {
+            }
         });
+    }
+
+    public static void set5DayGraph() {
+        FiveDayGraph = binding.fiveDayContent.graph;//findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> seriesMax = new LineGraphSeries<>();
+        LineGraphSeries<DataPoint> seriesMin = new LineGraphSeries<>();
+        int date=0;
+        for (int i = 0; i < 5; i++) {
+            date=c.fiveDay[i]==null||c.fiveDay[i].getDate()==""? i : Integer.parseInt(c.fiveDay[i].getDate().split("-|\\ ")[2]);
+
+            seriesMax.appendData(new DataPoint(date, c.fiveDay[i].getMaxTemp()), false, 5);
+            seriesMin.appendData(new DataPoint(date, c.fiveDay[i].getMinTemp()), false, 5);
+                                    /*appendData(new DataPoint[] {
+                                    new DataPoint(0, 1),
+                                    new DataPoint(1, 5)});*/
+        }
+        FiveDayGraph.removeAllSeries();
+        FiveDayGraph.getGridLabelRenderer().setGridColor(Color.WHITE);
+        FiveDayGraph.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
+        FiveDayGraph.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+        FiveDayGraph.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.HORIZONTAL);
+
+        seriesMax.setDrawBackground(true);
+        seriesMax.setColor(Color.parseColor("#AAFFE8BC"));
+        seriesMax.setThickness(10);
+        seriesMax.setBackgroundColor(Color.parseColor("#66FFE8BC"));
+        seriesMax.setDrawDataPoints(true);
+        seriesMax.setDataPointsRadius(15);
+
+
+        seriesMin.setColor(Color.parseColor("#AA2D70FF"));
+        seriesMin.setDrawBackground(true);
+        seriesMin.setBackgroundColor(Color.parseColor("#662D70FF"));
+        seriesMin.setThickness(10);
+        seriesMin.setDrawDataPoints(true);
+        seriesMin.setDataPointsRadius(15);
+        FiveDayGraph.addSeries(seriesMax);
+        FiveDayGraph.addSeries(seriesMin);
     }
 
     private void prepareLeftDrawer() {
@@ -352,6 +392,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mDrawerLayout.closeDrawer(Gravity.START);
                 MainActivity.currentTab = 3;
                 SetVisiblePage(currentTab);
+                set5DayGraph();
             }
         });
     }

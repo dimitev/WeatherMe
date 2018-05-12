@@ -64,6 +64,8 @@ public class SearchForCity {
                         c.setCountry(current.getString("country"));
                         citiesFound.add(c);
                     }
+                    AddCitiesActivity.mAdapter = new MyAdapter(SearchForCity.citiesFound);
+                    AddCitiesActivity.mRecyclerView.setAdapter(AddCitiesActivity.mAdapter);
                     AddCitiesActivity.mAdapter.notifyDataSetChanged();//updates the drawer
                 } catch (JSONException e) {
                     e.printStackTrace();
