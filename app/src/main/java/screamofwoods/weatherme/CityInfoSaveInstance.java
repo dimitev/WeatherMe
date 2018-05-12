@@ -1,25 +1,15 @@
 package screamofwoods.weatherme;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
-
-//TODO REWORK USING SERIALIZED FILES
 
 public class CityInfoSaveInstance{
     public static final String FILELIST = "UserCities.bin";
@@ -74,7 +64,6 @@ public class CityInfoSaveInstance{
         {
             File fl = new File(appContext.getFilesDir(), FILELIST);
             File fc = new File(appContext.getFilesDir(), FILECURRENT);
-            Log.e("read", "kur");
             if(fl.exists()) {
                 FileInputStream fis = new FileInputStream(fl);
                 ObjectInputStream ois = new ObjectInputStream(fis);
@@ -101,9 +90,6 @@ public class CityInfoSaveInstance{
                 if (currentCity != null) {
                     MainActivity.c = currentCity;
                 }
-            }
-            else{
-                //Log.e();
             }
         }catch(IOException ioe){
             Log.e("IOException read", "Shit is bad man");

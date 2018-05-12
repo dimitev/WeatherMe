@@ -61,19 +61,19 @@ public class AddCitiesActivity extends AppCompatActivity {
             //Change selected city from right hand side list
             @Override
             public void onClick(View view, int position) {
-                CityInfo nc = SearchForCity.citiesFound.get(position);
+                CityInfo newCity = SearchForCity.citiesFound.get(position);
                 for (CityInfo s : MainActivity.UserCities) {
-                    if (s.getName().equals((nc.getName().split(",")[0])) && s.getCountry().equals(nc.getCountry())) {
+                    if (s.getName().equals((newCity.getName().split(",")[0])) && s.getCountry().equals(newCity.getCountry())) {
                         Toast.makeText(getAppContext(), "City already added", Toast.LENGTH_SHORT).show();
                         //Log.e("Add a city","gets in the for");
                         return;
                     }
                     //Log.e("coutries","'"+nc.getCountry()+"'  '"+s.getCountry()+"'");
                 }
-                nc = new CityInfo(nc.getName().split(",")[0], 0, 0, true);
-                new WeatherGetterOnce(nc, getApplicationContext()).start();
-                MainActivity.UserCities.add(nc);
-                MainActivity.setCurrent(nc);
+                newCity = new CityInfo(newCity.getName().split(",")[0], 0, 0, true);
+                new WeatherGetterOnce(newCity, getApplicationContext()).start();
+                MainActivity.UserCities.add(newCity);
+                MainActivity.setCurrent(newCity);
                 SearchForCity.citiesFound.clear();
                 MainActivity.mAdapter.notifyDataSetChanged();
                 finish();

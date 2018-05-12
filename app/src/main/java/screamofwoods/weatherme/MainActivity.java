@@ -32,9 +32,7 @@ import screamofwoods.weatherme.databinding.ActivityMainBinding;
 
 import static com.loopj.android.http.AsyncHttpClient.log;
 
-//TODO fix setting the city by gps coordinates!!!
-//TODO HINT -> setCurrent and WeatherGetterOnce and WeatherGetterPeriodically are messed up when called with the gps
-//TODO response time check, use OnFaliure
+//TODO response time check, use OnFailure
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static ActivityMainBinding binding;//the binding between the classes and UI
