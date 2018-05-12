@@ -52,51 +52,45 @@
                     android:fitsSystemWindows="true"
                     tools:openDrawer="end">
 
-                    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/swiperefresh"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
 
-                        <ScrollView
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="match_parent">
 
-                            <RelativeLayout
+                            <LinearLayout
+                                android:id="@+id/current"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="match_parent">
 
-                                <LinearLayout
-                                    android:id="@+id/current"
+                                <include
+                                    android:id="@+id/current_content"
+                                    layout="@layout/current_content"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="match_parent" />
+                            </LinearLayout>
 
-                                    <include
-                                        android:id="@+id/current_content"
-                                        layout="@layout/current_content" />
-                                </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/hourly"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
 
-                                <LinearLayout
-                                    android:id="@+id/hourly"
+                                <include
+                                    android:id="@+id/hourly_content"
+                                    layout="@layout/hourly_content"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="match_parent" />
+                            </LinearLayout>
 
-                                    <include
-                                        android:id="@+id/hourly_content"
-                                        layout="@layout/hourly_content" />
-                                </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/five_day"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
 
-                                <LinearLayout
-                                    android:id="@+id/five_day"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <include
-                                        android:id="@+id/five_day_content"
-                                        layout="@layout/five_day_content" />
-                                </LinearLayout>
-                            </RelativeLayout>
-                        </ScrollView>
-                    </android.support.v4.widget.SwipeRefreshLayout>
+                                <include
+                                    android:id="@+id/five_day_content"
+                                    layout="@layout/five_day_content" />
+                            </LinearLayout>
+                        </RelativeLayout>
 
                     <android.support.design.widget.NavigationView
                         android:id="@+id/nav_viewcities"

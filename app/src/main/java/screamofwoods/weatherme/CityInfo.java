@@ -284,17 +284,15 @@ public class CityInfo extends BaseObservable implements Serializable {
             case "Freezing fog":
                 return MainActivity.getAppContext().getResources().getDrawable(R.drawable.fog);
             case "Sunny":
-
                 return MainActivity.getAppContext().getResources().getDrawable(R.drawable.sunny);
             case "Clear":
-
                 return MainActivity.getAppContext().getResources().getDrawable(R.drawable.clear);
             //rain
             default: {
                 //storm
                 if (w.contains("storm") || w.contains("thunder"))
                     return MainActivity.getAppContext().getResources().getDrawable(R.drawable.storm);
-                else if (w.contains("rain") || w.contains("pellets") || w.contains("sleet"))
+                else if (w.contains("rain") || w.contains("pellets") || w.contains("sleet")||w.contains("drizzle"))
                     return MainActivity.getAppContext().getResources().getDrawable(R.drawable.rain);
                     //snow
                 else if (w.contains("snow"))
@@ -303,7 +301,7 @@ public class CityInfo extends BaseObservable implements Serializable {
         }
 
         //clear
-        return null;
+        return null;//MainActivity.getAppContext().getResources().getDrawable(R.drawable.clear);
     }
 
 

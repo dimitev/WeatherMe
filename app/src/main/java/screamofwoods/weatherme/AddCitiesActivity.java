@@ -84,5 +84,9 @@ public class AddCitiesActivity extends AppCompatActivity {
             }
         }));
     }
-
+    @Override
+    protected void onStop() {
+        SearchForCity.citiesFound.clear();
+        super.onStop();
+    }
 }

@@ -18,7 +18,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.Menu;
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             jobScheduler.schedule(jobInfo); //Reschedule the job
         } else {
             backgroundUpdateForecast();
-            Log.d("Set current", "NPE");
+            //Log.d("Set current", "NPE");
         }
     }
 
@@ -163,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //Change selected city from right hand side list
             @Override
             public void onClick(View view, int position) {
-                 setCurrent(UserCities.get(position));
+                setCurrent(UserCities.get(position));
             }
 
             @Override
@@ -222,12 +221,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding.currentContent.setState(c);//sets the city to be shown in the content
         binding.hourlyContent.setState(c);
         binding.fiveDayContent.setState(c);
-        binding.swiperefresh.setOnRefreshListener(//swipe down to refresh listener
+        binding.currentContent.swiperefresh.setOnRefreshListener(//swipe down to refresh listener
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        binding.swiperefresh.setRefreshing(true);//changes the state of the icon
-                        binding.swiperefresh.setRefreshing(false);
+                        binding.currentContent.swiperefresh.setRefreshing(true);//changes the state of the icon
+                        binding.currentContent.swiperefresh.setRefreshing(false);
+                        if (c != null && !(c.getName().equals("No city"))) {
+                            new WeatherGetterOnce(c, mainContext).start();
+                        } else {
+                            Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                }
+        );
+        binding.hourlyContent.swiperefresh.setOnRefreshListener(//swipe down to refresh listener
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        binding.hourlyContent.swiperefresh.setRefreshing(true);//changes the state of the icon
+                        binding.hourlyContent.swiperefresh.setRefreshing(false);
+                        if (c != null && !(c.getName().equals("No city"))) {
+                            new WeatherGetterOnce(c, mainContext).start();
+                        } else {
+                            Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                }
+        );
+        binding.fiveDayContent.swiperefresh.setOnRefreshListener(//swipe down to refresh listener
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        binding.fiveDayContent.swiperefresh.setRefreshing(true);//changes the state of the icon
+                        binding.fiveDayContent.swiperefresh.setRefreshing(false);
                         if (c != null && !(c.getName().equals("No city"))) {
                             new WeatherGetterOnce(c, mainContext).start();
                         } else {
@@ -307,24 +336,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView current = findViewById(R.id.txtCurrent);
         TextView hourly = findViewById(R.id.txtHourly);
         TextView fiveday = findViewById(R.id.txtFiveday);
-        binding.hourly.setVisibility(View.INVISIBLE);//sets the visible page
-        binding.fiveDay.setVisibility(View.INVISIBLE);//
+        binding.hourly.setVisibility(View.GONE);//sets the visible page
+        binding.fiveDay.setVisibility(View.GONE);//
         binding.current.setVisibility(View.VISIBLE);//
         current.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDrawerLayout.closeDrawer(Gravity.START);
-                binding.hourly.setVisibility(View.INVISIBLE);
-                binding.fiveDay.setVisibility(View.INVISIBLE);
+                binding.hourly.setVisibility(View.GONE);
+                binding.fiveDay.setVisibility(View.GONE);
                 binding.current.setVisibility(View.VISIBLE);
             }
         });
         hourly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.current.setVisibility(View.INVISIBLE);
+                binding.current.setVisibility(View.GONE);
                 binding.hourly.setVisibility(View.VISIBLE);
-                binding.fiveDay.setVisibility(View.INVISIBLE);
+                binding.fiveDay.setVisibility(View.GONE);
                 mDrawerLayout.closeDrawer(Gravity.START);
             }
         });
@@ -332,9 +361,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 mDrawerLayout.closeDrawer(Gravity.START);
-                binding.hourly.setVisibility(View.INVISIBLE);
+                binding.hourly.setVisibility(View.GONE);
                 binding.fiveDay.setVisibility(View.VISIBLE);
-                binding.current.setVisibility(View.INVISIBLE);
+                binding.current.setVisibility(View.GONE);
             }
         });
     }
