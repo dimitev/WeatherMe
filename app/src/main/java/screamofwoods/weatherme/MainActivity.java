@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static void setCurrent(CityInfo in) {
-        if(c == null){
+        if (c == null) {
             log.e("C is NULL", "FUCK FUCK FUCK");
         }
         c.Copy(in);
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //UserCities.add(c);
         //c.forecast.getMomentForecast();//gets some forecast
         if (cityInfoSaveInstance.readCitiesList()) {
-            log.e("file io", "asdf: " + (c==null? "true":"false"));
+            log.e("file io", "asdf: " + (c == null ? "true" : "false"));
             Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
             startActivity(intent);
         }
@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStop() {
         cityInfoSaveInstance.saveCitiesList();
+        if (jobScheduler != null) jobScheduler.cancel(1);
         super.onStop();
     }
 
