@@ -420,6 +420,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 alert.show();
             }
         });
+        findViewById(R.id.txtSettings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mainContext);
+                //Uncomment the below code to Set the message and title from the strings.xml file
+                //builder.setMessage(R.string.dialog_message) .setTitle(R.string.dialog_title);
+
+                //Setting message manually and performing action on button click
+                builder.setMessage("Select the metric system for this location")
+                        .setCancelable(true)
+                        .setPositiveButton("Celsius", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //finish();
+                                c.setIsMetric(true);
+                                new WeatherGetterOnce(c,mainContext).start();
+                                mDrawerLayout.closeDrawer(Gravity.START);
+                            }
+                        })
+                        .setNegativeButton("Fahrenheit", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //finish();
+                                c.setIsMetric(false);
+                                new WeatherGetterOnce(c,mainContext).start();
+                                mDrawerLayout.closeDrawer(Gravity.START);
+                            }
+                        });
+
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.setTitle("SI or imperial?");
+                alert.setCancelable(true);
+                alert.show();
+            }
+        });
     }
 
     @Override
