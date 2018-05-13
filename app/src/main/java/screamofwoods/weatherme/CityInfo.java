@@ -290,7 +290,7 @@ public class CityInfo extends BaseObservable implements Serializable {
             //rain
             default: {
                 //storm
-                if (w.contains("storm") || w.contains("thunder"))
+                if (w.contains("storm") || w.contains("hunder"))
                     return MainActivity.getAppContext().getResources().getDrawable(R.drawable.storm);
                 else if (w.contains("rain") || w.contains("pellets") || w.contains("sleet")||w.contains("drizzle"))
                     return MainActivity.getAppContext().getResources().getDrawable(R.drawable.rain);
