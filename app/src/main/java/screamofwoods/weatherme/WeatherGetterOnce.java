@@ -27,6 +27,9 @@ public class WeatherGetterOnce extends Thread {
                     new UpdateForecastAsync().execute(city);
                 } else {
                     Toast.makeText(appContext, "You're offline!", Toast.LENGTH_LONG).show();
+                    MainActivity.binding.currentContent.swiperefresh.setRefreshing(false);
+                    MainActivity.binding.hourlyContent.swiperefresh.setRefreshing(false);
+                    MainActivity.binding.fiveDayContent.swiperefresh.setRefreshing(false);
                 }
             }
         });

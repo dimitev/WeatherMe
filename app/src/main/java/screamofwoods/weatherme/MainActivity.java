@@ -230,12 +230,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onRefresh() {
                         binding.currentContent.swiperefresh.setRefreshing(true);//changes the state of the icon
-                        binding.currentContent.swiperefresh.setRefreshing(false);
                         if (c != null && !(c.getName().equals("No city"))) {
                             new WeatherGetterOnce(c, mainContext).start();
                         } else {
                             Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
                             startActivity(intent);
+                            binding.currentContent.swiperefresh.setRefreshing(false);
                         }
                     }
                 }
@@ -245,12 +245,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onRefresh() {
                         binding.hourlyContent.swiperefresh.setRefreshing(true);//changes the state of the icon
-                        binding.hourlyContent.swiperefresh.setRefreshing(false);
                         if (c != null && !(c.getName().equals("No city"))) {
                             new WeatherGetterOnce(c, mainContext).start();
                         } else {
                             Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
                             startActivity(intent);
+                            binding.hourlyContent.swiperefresh.setRefreshing(false);
                         }
                     }
                 }
@@ -260,12 +260,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onRefresh() {
                         binding.fiveDayContent.swiperefresh.setRefreshing(true);//changes the state of the icon
-                        binding.fiveDayContent.swiperefresh.setRefreshing(false);
                         if (c != null && !(c.getName().equals("No city"))) {
                             new WeatherGetterOnce(c, mainContext).start();
                         } else {
                             Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
                             startActivity(intent);
+                            binding.fiveDayContent.swiperefresh.setRefreshing(false);
                         }
                     }
                 }
