@@ -15,4 +15,11 @@ public class UpdateForecastAsync extends AsyncTask<CityInfo, Void, Void> {
         }
         return null;
     }
+    @Override
+    protected void onPostExecute(Void a)
+    {
+        MainActivity.binding.currentContent.swiperefresh.setRefreshing(false);
+        MainActivity.binding.hourlyContent.swiperefresh.setRefreshing(false);
+        MainActivity.binding.fiveDayContent.swiperefresh.setRefreshing(false);
+    }
 }

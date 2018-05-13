@@ -58,9 +58,6 @@ public class Forecast implements Serializable{
                 getFiveDayForecast(city, response);
             }
         });
-        MainActivity.binding.currentContent.swiperefresh.setRefreshing(false);
-        MainActivity.binding.hourlyContent.swiperefresh.setRefreshing(false);
-        MainActivity.binding.fiveDayContent.swiperefresh.setRefreshing(false);
     }
 
     //Update the current weather for a city
