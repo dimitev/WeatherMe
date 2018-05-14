@@ -2,8 +2,11 @@ package screamofwoods.weatherme;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.graphics.drawable.Drawable;
 
 import java.io.Serializable;
+
+import static screamofwoods.weatherme.CityInfo.getWeatherConditionImage;
 
 public class FiveDay extends BaseObservable implements Serializable {
     private static final long serialVersionUID = 4;
@@ -37,6 +40,10 @@ public class FiveDay extends BaseObservable implements Serializable {
     public void setCondition(String condition) {
         this.condition = condition;
         notifyPropertyChanged(BR._all);
+    }
+    @Bindable
+    public Drawable getImage() {
+        return getWeatherConditionImage(this.condition);
     }
 
     @Bindable

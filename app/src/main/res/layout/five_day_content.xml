@@ -37,12 +37,18 @@
 
                 android:layout_width="match_parent"
                 android:layout_marginTop="10dp"
-                android:paddingRight="30dp"
+                android:layout_marginRight="30dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.7"
                 android:id="@+id/graph"
                 />
-
+            <ImageView
+                android:id="@+id/txtWeather1"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:contentDescription="weather"
+                android:scaleType="fitCenter"
+                android:src="@{state.fiveDay[0].image}" />
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </layout>

@@ -10,7 +10,7 @@
     <string name="title_activity_add_cities">AddCitiesActivity</string>
     <string name="Celsius">°C</string>
     <string name="Farenheit">°F</string>
-    <string name="f0">0</string>
-    <string name="f1">1</string>
-    <string name="f2">2</string>
+    <string name="kph">km/h</string>
+    <string name="mph">m/h</string>
+    <string name="concat">%1$s%2$s</string>
 </resources>

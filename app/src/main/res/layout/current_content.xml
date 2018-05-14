@@ -114,17 +114,29 @@
 
                 <TextView
                     android:id="@+id/txtCityWind"
-                    android:layout_width="74dp"
+                    android:layout_width="53dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/imgWind"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="43dp"
+                    android:gravity="right"
                     android:shadowColor="#000000"
                     android:shadowRadius="0"
                     android:text="@{String.valueOf(state.windSpeed)}"
-                    android:textAlignment="center"
+                    android:textAlignment="gravity"
                     android:textColor="@android:color/white"
                     android:textSize="30dp" />
+
+                <TextView
+                    android:id="@+id/txtWindSpeed"
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/txtCityRain"
+                    android:layout_toEndOf="@+id/txtCityWind"
+                    android:text="@{state.IsMetric ? @string/kph : @string/mph}"
+                    android:textColor="@android:color/white"
+                    android:textSize="12dp"
+                    android:paddingBottom="5dp"/>
 
                 <ImageView
                     android:id="@+id/imgRain"
@@ -138,13 +150,14 @@
 
                 <TextView
                     android:id="@+id/txtCityRain"
-                    android:layout_width="50dp"
+                    android:layout_width="61dp"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/imgRain"
                     android:layout_alignTop="@+id/txtCityWind"
+                    android:layout_marginStart="-5dp"
                     android:shadowColor="#000000"
                     android:shadowRadius="0"
-                    android:text="@{String.valueOf(state.chanceOfRain)}"
+                    android:text="@{String.valueOf(state.chanceOfRain)+'%'}"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
                     android:textSize="30dp" />
