@@ -40,7 +40,6 @@ import screamofwoods.weatherme.databinding.ActivityMainBinding;
 
 import static com.loopj.android.http.AsyncHttpClient.log;
 
-//TODO response time check, use OnFailure
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static ActivityMainBinding binding;//the binding between the classes and UI
@@ -71,10 +70,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static void setCurrent(CityInfo in) {
-        if (c == null) {
-            log.e("C is NULL", "FUCK FUCK FUCK");
-        }
-        //c.Copy(in);
         c = in;
         binding.setState(c);
         set5DayGraph();
@@ -86,8 +81,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             jobScheduler.cancel(1); //Cancel the current job that's responsible for updating
             jobScheduler.schedule(jobInfo); //Reschedule the job
         } else {
+            new WeatherGetterOnce(c, mainContext).start();
             backgroundUpdateForecast();
-            //Log.d("Set current", "NPE");
         }
     }
 
@@ -96,12 +91,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         MainActivity.mainContext = getAppContext();
         mainContext = this;
+        //If there are no cities in the list -> add new city
         if (cityInfoSaveInstance.readCitiesList()) {
-            log.e("file io", "asdf: " + (c == null ? "true" : "false"));
             Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
             startActivity(intent);
-        }
-        //new WeatherGetterOnce(c, this).start();
+        };
         prepareBinding();
         set5DayGraph();
         prepareToolbar();
@@ -110,8 +104,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         prepareRecycler();//fills the cities drawer
         prepareRecyclerHourly();//fills the hourly forecast
         mAdapter.notifyDataSetChanged();//updates the drawer
-
-        //cityInfoSaveInstance.saveCitiesList();
     }
 
     @Override
@@ -130,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ComponentName componentName = new ComponentName(getAppContext(), WeatherGetterPeriodically.class);
         jobInfo = new JobInfo.Builder(1, componentName)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setPeriodic(1000 * 60 * 15) //Every 15 mins
+                .setPeriodic(1000 * 60 * 15) //Updates the forecast every 15mins if there is available network
                 .build();
         jobScheduler.schedule(jobInfo);
     }
@@ -333,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    //Draws a graphic for the five-day forecast
     public static void set5DayGraph() {
         FiveDayGraph = binding.fiveDayContent.graph;//findViewById(R.id.graph);
         LineGraphSeries<DataPoint> seriesMax = new LineGraphSeries<>();
@@ -343,9 +336,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             seriesMax.appendData(new DataPoint(date, c.fiveDay[i].getMaxTemp()), false, 5);
             seriesMin.appendData(new DataPoint(date, c.fiveDay[i].getMinTemp()), false, 5);
-                                    /*appendData(new DataPoint[] {
-                                    new DataPoint(0, 1),
-                                    new DataPoint(1, 5)});*/
         }
         FiveDayGraph.removeAllSeries();
         FiveDayGraph.getGridLabelRenderer().setGridColor(Color.WHITE);

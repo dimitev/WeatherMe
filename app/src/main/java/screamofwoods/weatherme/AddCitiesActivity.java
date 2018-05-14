@@ -29,7 +29,6 @@ public class AddCitiesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//shows the toolbar arrow and hamburger menu
         getSupportActionBar().setHomeButtonEnabled(true);//shows the toolbar arrow and hamburger menu
         SearchForCity.citiesFound.clear();
-        //SearchForCity.citiesFound.add(new CityInfo("Varna", 0, 0, true));
         prepareRecycler();
         Button search = findViewById(R.id.search_button);
         search.setOnClickListener(new View.OnClickListener() {
@@ -37,15 +36,11 @@ public class AddCitiesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 TextView tv = findViewById(R.id.textView);
                 SearchForCity.citiesFound.clear();
-                //SearchForCity.citiesFound.add(new CityInfo("Varna",0,0,true));
                 SearchForCity newCity = new SearchForCity(tv.getText().toString());
                 newCity.findCity();
                 mAdapter.notifyDataSetChanged();//updates the drawer
             }
         });
-//        CityInfo d =new CityInfo("Varna",0,0,true);
-//        new WeatherGetterOnce(d).start();
-//        UserCities.add(d);
     }
 
     private void prepareRecycler() {
@@ -53,7 +48,6 @@ public class AddCitiesActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        Log.e("AddCitiesActivity", "Prepare Recycler Success coming here");
         // specify an adapter
         mAdapter = new MyAdapter(SearchForCity.citiesFound);
         mRecyclerView.setAdapter(mAdapter);
@@ -65,10 +59,8 @@ public class AddCitiesActivity extends AppCompatActivity {
                 for (CityInfo s : MainActivity.UserCities) {
                     if (s.getName().equals((newCity.getName().split(",")[0])) && s.getCountry().equals(newCity.getCountry())) {
                         Toast.makeText(getAppContext(), "City already added", Toast.LENGTH_SHORT).show();
-                        //Log.e("Add a city","gets in the for");
                         return;
                     }
-                    //Log.e("coutries","'"+nc.getCountry()+"'  '"+s.getCountry()+"'");
                 }
                 newCity = new CityInfo(newCity.getName().split(",")[0], 0, 0, true);
                 new WeatherGetterOnce(newCity, getApplicationContext()).start();

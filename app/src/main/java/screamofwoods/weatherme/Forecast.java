@@ -103,6 +103,7 @@ public class Forecast implements Serializable{
         }
     }
 
+    //Get hourly forecast from the current hour to 24 hours forward
     private void getHourlyForecast(CityInfo city, JSONObject response){
         JSONArray dayOneJSON, dayTwoJSON;
         try {
@@ -149,6 +150,7 @@ public class Forecast implements Serializable{
         }
     }
 
+    //Gets forecast for the next five days
     private void getFiveDayForecast(final CityInfo city, JSONObject response){
         JSONArray dayJSON;
         try {

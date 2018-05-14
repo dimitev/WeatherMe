@@ -18,6 +18,7 @@ public class UpdateForecastAsync extends AsyncTask<CityInfo, Void, Void> {
     @Override
     protected void onPostExecute(Void a)
     {
+        //Handles the loading icon
         MainActivity.binding.currentContent.swiperefresh.setRefreshing(false);
         MainActivity.binding.hourlyContent.swiperefresh.setRefreshing(false);
         MainActivity.binding.fiveDayContent.swiperefresh.setRefreshing(false);

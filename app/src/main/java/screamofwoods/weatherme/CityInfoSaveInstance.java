@@ -22,6 +22,7 @@ public class CityInfoSaveInstance{
         this.appContext = appContext;
     }
 
+    //Save the favourite cities to a file
     public void saveCitiesList(){
         userCities = MainActivity.UserCities;
         currentCity = MainActivity.c;
@@ -36,7 +37,6 @@ public class CityInfoSaveInstance{
                 fos = new FileOutputStream(fl);
                 oos = new ObjectOutputStream(fos);
                 oos.writeObject(userCities);
-                Log.e("Success in write", "Success writing list");
                 oos.close();
                 fos.close();
             }
@@ -49,7 +49,6 @@ public class CityInfoSaveInstance{
                     fos = new FileOutputStream(fc);
                     oos = new ObjectOutputStream(fos);
                     oos.writeObject(currentCity);
-                    Log.e("Success in write", "Success writing current");
                     oos.close();
                     fos.close();
                 }
@@ -59,6 +58,7 @@ public class CityInfoSaveInstance{
         }
     }
 
+    //Read the favorite cities files
     public boolean readCitiesList(){
         try
         {
@@ -72,14 +72,12 @@ public class CityInfoSaveInstance{
                 if (!userCities.isEmpty()) {
                     MainActivity.UserCities = userCities;
                 }
-                Log.e("List after reading","List empty? " + userCities.isEmpty());
                 ois.close();
                 fis.close();
                 if (fc.exists()) {
                     fis = new FileInputStream(fc);
                     ois = new ObjectInputStream(fis);
                     currentCity = (CityInfo) ois.readObject();
-                    Log.e("Current city", "Current city == null?: " + (currentCity == null));
                     ois.close();
                     fis.close();
                 } else {
@@ -88,7 +86,7 @@ public class CityInfoSaveInstance{
                     }
                 }
                 if (currentCity != null) {
-                    MainActivity.c = currentCity;
+                    MainActivity.setCurrent(currentCity);
                 }
             }
         }catch(IOException ioe){
