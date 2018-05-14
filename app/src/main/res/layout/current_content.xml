@@ -114,11 +114,11 @@
 
                 <TextView
                     android:id="@+id/txtCityWind"
-                    android:layout_width="53dp"
+                    android:layout_width="64dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/imgWind"
-                    android:layout_marginStart="43dp"
+                    android:layout_marginStart="35dp"
                     android:gravity="right"
                     android:shadowColor="#000000"
                     android:shadowRadius="0"
@@ -133,10 +133,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/txtCityRain"
                     android:layout_toEndOf="@+id/txtCityWind"
+                    android:paddingBottom="5dp"
                     android:text="@{state.IsMetric ? @string/kph : @string/mph}"
                     android:textColor="@android:color/white"
-                    android:textSize="12dp"
-                    android:paddingBottom="5dp"/>
+                    android:textSize="12dp" />
 
                 <ImageView
                     android:id="@+id/imgRain"
@@ -175,22 +175,96 @@
                 <TextView
                     android:id="@+id/txtCityUV"
                     android:layout_width="82dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_alignStart="@+id/imgUV"
                     android:layout_alignTop="@+id/txtCityWind"
                     android:layout_marginStart="-14dp"
                     android:shadowColor="#000000"
                     android:shadowRadius="0"
+                    android:gravity="center"
                     android:text="@{String.valueOf(state.uvIndex)}"
-                    android:textAlignment="center"
+                    android:textAlignment="gravity"
                     android:textColor="@android:color/white"
                     android:textSize="22dp" />
+
+                <ImageView
+                    android:id="@+id/imgWindDir"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignStart="@+id/imgWind"
+                    android:layout_below="@+id/txtCityWind"
+                    android:layout_marginTop="20dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/winddir" />
+
+                <TextView
+                    android:id="@+id/txtWindDir"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/imgWindDir"
+                    android:layout_marginStart="50dp"
+                    android:gravity="center"
+                    android:shadowColor="#000000"
+                    android:shadowRadius="0"
+                    android:text="@{state.windDirection}"
+                    android:textAlignment="gravity"
+                    android:textColor="@android:color/white"
+                    android:textSize="25dp" />
+
+
+                <ImageView
+                    android:id="@+id/imgSnow"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignStart="@+id/imgRain"
+                    android:layout_below="@+id/txtCityWind"
+                    android:layout_marginTop="20dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/snowflake" />
+
+                <TextView
+                    android:id="@+id/txtCitySnow"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/txtCityRain"
+                    android:layout_below="@+id/imgWindDir"
+                    android:shadowColor="#000000"
+                    android:shadowRadius="0"
+                    android:text="@{String.valueOf(state.chanceOfSnow)+'%'}"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="30dp" />
+
+                <ImageView
+                    android:id="@+id/imgPress"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignStart="@+id/imgUV"
+                    android:layout_below="@+id/txtCityWind"
+                    android:layout_marginTop="20dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/pressure" />
+
+                <TextView
+                    android:id="@+id/txtCityPress"
+                    android:layout_width="82dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/txtCityUV"
+                    android:layout_below="@+id/imgWindDir"
+                    android:shadowColor="#000000"
+                    android:shadowRadius="0"
+                    android:text="@{@string/concat(String.valueOf(state.atmPressure), state.isMetric ? @string/milibars:@string/inches)}"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="18dp" />
 
                 <TextView
                     android:id="@+id/txtCityUpdatedView"
                     android:layout_width="200dp"
                     android:layout_height="20dp"
-                    android:layout_below="@+id/txtCityWind"
+                    android:layout_marginTop="20dp"
+                    android:layout_below="@+id/txtWindDir"
                     android:layout_centerHorizontal="true"
                     android:shadowColor="#000000"
                     android:shadowRadius="0"

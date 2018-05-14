@@ -12,5 +12,7 @@
     <string name="Farenheit">°F</string>
     <string name="kph">km/h</string>
     <string name="mph">m/h</string>
+    <string name="milibars">mb</string>
+    <string name="inches">in</string>
     <string name="concat">%1$s%2$s</string>
 </resources>
