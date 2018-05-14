@@ -95,7 +95,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (cityInfoSaveInstance.readCitiesList()) {
             Intent intent = new Intent(MainActivity.this, AddCitiesActivity.class);
             startActivity(intent);
-        };
+        } else {
+            new WeatherGetterOnce(c, this).start();
+        }
         prepareBinding();
         set5DayGraph();
         prepareToolbar();
