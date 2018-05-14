@@ -86,7 +86,7 @@ public class CityInfoSaveInstance{
                     }
                 }
                 if (currentCity != null) {
-                    MainActivity.setCurrent(currentCity);
+                    MainActivity.c = currentCity;
                 }
             }
         }catch(IOException ioe){
