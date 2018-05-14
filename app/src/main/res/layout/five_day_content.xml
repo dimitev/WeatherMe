@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -19,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical"
-            tools:context=".MainActivity"
-            android:weightSum="1">
+            android:weightSum="1"
+            tools:context=".MainActivity">
 
 
             <TextView
@@ -35,20 +34,76 @@
 
             <com.jjoe64.graphview.GraphView
 
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="30dp"
-                android:layout_height="0dp"
-                android:layout_weight="0.7"
                 android:id="@+id/graph"
-                />
-            <ImageView
-                android:id="@+id/txtWeather1"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:contentDescription="weather"
-                android:scaleType="fitCenter"
-                android:src="@{state.fiveDay[0].image}" />
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.7" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/txtWeather0"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.20"
+                    android:contentDescription="weather"
+                    android:scaleType="fitStart"
+                    android:layout_marginLeft="20dp"
+                    android:src="@{state.fiveDay[0].image}" />
+
+
+                <ImageView
+                    android:id="@+id/txtWeather2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.30"
+                    android:contentDescription="weather"
+                    android:scaleType="fitCenter"
+                    android:src="@{state.fiveDay[2].image}" />
+
+
+
+                <ImageView
+                    android:id="@+id/txtWeather4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.20"
+                    android:contentDescription="weather"
+                    android:scaleType="fitEnd"
+                    android:src="@{state.fiveDay[4].image}"
+                    android:layout_marginRight="10dp"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="-70dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="40dp">
+
+                <ImageView
+                    android:id="@+id/txtWeather1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:contentDescription="weather"
+                    android:scaleType="fitCenter"
+                    android:src="@{state.fiveDay[1].image}" />
+                <ImageView
+                    android:id="@+id/txtWeather3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:contentDescription="weather"
+                    android:scaleType="fitCenter"
+                    android:src="@{state.fiveDay[3].image}" />
+            </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </layout>

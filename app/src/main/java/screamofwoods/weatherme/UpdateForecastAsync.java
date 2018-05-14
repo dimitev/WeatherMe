@@ -22,5 +22,6 @@ public class UpdateForecastAsync extends AsyncTask<CityInfo, Void, Void> {
         MainActivity.binding.currentContent.swiperefresh.setRefreshing(false);
         MainActivity.binding.hourlyContent.swiperefresh.setRefreshing(false);
         MainActivity.binding.fiveDayContent.swiperefresh.setRefreshing(false);
+        MainActivity.set5DayGraph();
     }
 }
