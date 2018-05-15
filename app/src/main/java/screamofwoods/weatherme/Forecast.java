@@ -73,7 +73,6 @@ public class Forecast implements Serializable{
             city.setRegion(response.getJSONObject("location").getString("region"));
             city.setCountry(response.getJSONObject("location").getString("country"));
             city.setLastUpdated(response.getJSONObject("current").getString("last_updated"));
-            city.setAtmPressure((float) response.getJSONObject("current").getDouble("pressure_mb"));
             city.setChanceOfRain(response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONArray("hour").optJSONObject(currentHour).getInt("chance_of_rain"));
             city.setChanceOfSnow(response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONArray("hour").optJSONObject(currentHour).getInt("chance_of_snow"));
             city.setHumidity(response.getJSONObject("current").getInt("humidity"));
@@ -92,11 +91,13 @@ public class Forecast implements Serializable{
                 city.setWindSpeed((float) response.getJSONObject("current").getDouble("wind_kph"));
                 city.setMaximumTemperature((float) response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONObject("day").getDouble("maxtemp_c"));
                 city.setMinimumTemperature((float) response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONObject("day").getDouble("mintemp_c"));
+                city.setAtmPressure((float) response.getJSONObject("current").getDouble("pressure_mb"));
             } else {
                 city.setCurrentTemperature((float) response.getJSONObject("current").getDouble("temp_f"));
                 city.setWindSpeed((float) response.getJSONObject("current").getDouble("wind_mph"));
                 city.setMaximumTemperature((float) response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONObject("day").getDouble("maxtemp_f"));
                 city.setMinimumTemperature((float) response.getJSONObject("forecast").getJSONArray("forecastday").optJSONObject(0).getJSONObject("day").getDouble("mintemp_f"));
+                city.setAtmPressure((float) response.getJSONObject("current").getDouble("pressure_in"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
