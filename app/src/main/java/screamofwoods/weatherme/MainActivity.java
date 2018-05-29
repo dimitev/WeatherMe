@@ -29,16 +29,21 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import screamofwoods.weatherme.databinding.ActivityMainBinding;
-
-import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -330,15 +335,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Draws a graphic for the five-day forecast
     public static void set5DayGraph() {
         FiveDayGraph = binding.fiveDayContent.graph;//findViewById(R.id.graph);
+
         LineGraphSeries<DataPoint> seriesMax = new LineGraphSeries<>();
         LineGraphSeries<DataPoint> seriesMin = new LineGraphSeries<>();
-        int date=0;
-        for (int i = 0; i < 5; i++) {
-            date=c.fiveDay[i]==null||c.fiveDay[i].getDate()==""? i : Integer.parseInt(c.fiveDay[i].getDate().split("-|\\ ")[2]);
-
-            seriesMax.appendData(new DataPoint(date, c.fiveDay[i].getMaxTemp()), false, 5);
-            seriesMin.appendData(new DataPoint(date, c.fiveDay[i].getMinTemp()), false, 5);
-        }
         FiveDayGraph.removeAllSeries();
         FiveDayGraph.getGridLabelRenderer().setGridColor(Color.WHITE);
         FiveDayGraph.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
@@ -352,15 +351,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         seriesMax.setDrawDataPoints(true);
         seriesMax.setDataPointsRadius(15);
 
-
         seriesMin.setColor(Color.parseColor("#AA2D70FF"));
         seriesMin.setDrawBackground(true);
         seriesMin.setBackgroundColor(Color.parseColor("#662D70FF"));
         seriesMin.setThickness(10);
         seriesMin.setDrawDataPoints(true);
         seriesMin.setDataPointsRadius(15);
+
+        for (int i = 0; i < 5; i++) {
+            //date = c.fiveDay[i] == null || c.fiveDay[i].getDate() == "" ? i : Integer.parseInt(c.fiveDay[i].getDate().split("-|\\ ")[2]);
+                seriesMax.appendData(new DataPoint(i, c.fiveDay[i].getMaxTemp()), false, 5);
+                seriesMin.appendData(new DataPoint(i, c.fiveDay[i].getMinTemp()), false, 5);
+        }
+
         FiveDayGraph.addSeries(seriesMax);
         FiveDayGraph.addSeries(seriesMin);
+        FiveDayGraph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if (isValueX) {
+                        return "";// X labels removed because the graph cant even...
+                   // return super.formatLabel(value, isValueX);
+                } else {
+                    // show currency for y values
+                    return super.formatLabel(value, isValueX)+'°';
+                }
+            }
+        });
+        //FiveDayGraph.getGridLabelRenderer().setHumanRounding(false);
     }
 
     private void prepareLeftDrawer() {
@@ -426,7 +444,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             public void onClick(DialogInterface dialog, int id) {
                                 //finish();
                                 c.setIsMetric(true);
-                                new WeatherGetterOnce(c,mainContext).start();
+                                new WeatherGetterOnce(c, mainContext).start();
                                 mDrawerLayout.closeDrawer(Gravity.START);
                             }
                         })
@@ -434,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             public void onClick(DialogInterface dialog, int id) {
                                 //finish();
                                 c.setIsMetric(false);
-                                new WeatherGetterOnce(c,mainContext).start();
+                                new WeatherGetterOnce(c, mainContext).start();
                                 mDrawerLayout.closeDrawer(Gravity.START);
                             }
                         });
